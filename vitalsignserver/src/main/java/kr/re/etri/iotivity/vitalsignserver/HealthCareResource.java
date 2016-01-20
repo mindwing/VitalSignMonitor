@@ -213,9 +213,11 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler {
         return EntityHandlerResult.OK;
     }
 
+    public void increase() {}
+
     private void notifyObservers(OcResourceRequest request) {
         while (true) {
-            SystemClock.sleep(2);
+            SystemClock.sleep(10000);
 
             Log.d(TAG, "Notifying observers...");
             Log.d(TAG, toString());
@@ -230,6 +232,7 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler {
 //                            mObservationIds,
 //                            response);
 //                } else {
+                increase();
                 OcPlatform.notifyAllObservers(resourceHandle);
 //                }
             } catch (OcException e) {

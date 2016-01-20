@@ -12,6 +12,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.iotivity.base.ModeType;
+import org.iotivity.base.ObserveType;
 import org.iotivity.base.OcConnectivityType;
 import org.iotivity.base.OcException;
 import org.iotivity.base.OcHeaderOption;
@@ -55,6 +56,8 @@ public class MonitorActivity extends Activity implements
     private OcResource foundBloodSpO2Resource;
     private OcResource foundBodyTemperatureResource;
     private OcResource foundHeartRateResource;
+
+    private BloodGlucoseData bloodGlucoseData;
 
     private TextView[] spo2View = new TextView[4];
     private TextView[] heartRateView = new TextView[4];
@@ -125,6 +128,7 @@ public class MonitorActivity extends Activity implements
         glucoseView[1] = (TextView) findViewById(R.id.glucose_1);
         glucoseView[2] = (TextView) findViewById(R.id.glucose_2);
         glucoseView[3] = (TextView) findViewById(R.id.glucose_3);
+        bloodGlucoseData = new BloodGlucoseData(glucoseView[0]);
     }
 
     public void toggleConnection(View view) {
@@ -221,7 +225,7 @@ public class MonitorActivity extends Activity implements
     }
 
     @Override
-    public void onResourceFound(OcResource ocResource) {
+    public synchronized void onResourceFound(OcResource ocResource) {
         if (null == ocResource) {
             toast("onResourceFound():ocResource is null");
             Log.e(TAG, "ocResource is null");
@@ -272,6 +276,8 @@ public class MonitorActivity extends Activity implements
             case URI_HEART_RATE:
                 foundHeartRateResource = ocResource;
                 getHeartBeatResourceRepresentation();
+
+
                 break;
 
             default:
@@ -356,23 +362,34 @@ public class MonitorActivity extends Activity implements
                     switch (resourceUri) {
                         case URI_BLOOD_GLUCOSE:
                             glucoseView[0].setText(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE).toString());
+                            SystemClock.sleep(1);
+
+                            foundBloodGlucoseResource.observe(
+                                    ObserveType.OBSERVE,
+                                    new HashMap<String, String>(),
+                                    bloodGlucoseData);
+
                             break;
 
                         case URI_BLOOD_PRESSURE:
                             systolicView[0].setText(ocRepresentation.getValue(KEY_BLOOD_PRESSURE_SYSTOLIC).toString());
                             diastolicView[0].setText(ocRepresentation.getValue(KEY_BLOOD_PRESSURE_DIASTOLIC).toString());
+
                             break;
 
                         case URI_BLOOD_SPO2:
                             spo2View[0].setText(ocRepresentation.getValue(KEY_BLOOD_SPO2).toString());
+
                             break;
 
                         case URI_BODY_TEMPERATURE:
                             bodyTemperatureView[0].setText(ocRepresentation.getValue(KEY_BODY_TEMPERATURE).toString());
+
                             break;
 
                         case URI_HEART_RATE:
                             heartRateView[0].setText(ocRepresentation.getValue(KEY_HEART_RATE).toString());
+
                             break;
 
                         default:
@@ -386,7 +403,7 @@ public class MonitorActivity extends Activity implements
     }
 
     @Override
-    public void onGetFailed(Throwable throwable) {
+    public synchronized void onGetFailed(Throwable throwable) {
         toast(throwable.getMessage());
         Log.e(TAG, throwable.getMessage(), throwable);
     }

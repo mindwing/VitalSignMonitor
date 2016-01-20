@@ -19,6 +19,10 @@ public class BloodGlucoseResource extends HealthCareResource {
         resourceType = RESOURCE_TYPE_BLOOD_GLUCOSE;
     }
 
+    public void increase() {
+        ++glucose;
+    }
+
     @Override
     public void setOcRepresentation(OcRepresentation rep) {
         try {
