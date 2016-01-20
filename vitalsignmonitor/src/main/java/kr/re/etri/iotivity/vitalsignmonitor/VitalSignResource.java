@@ -19,12 +19,13 @@ public class VitalSignResource {
     static final String QUERY_HEART_RATE = OcPlatform.WELL_KNOWN_QUERY + "?rt=" + RESOURCE_TYPE_HEART_RATE;
 
     static final String KEY_NAME = "name";
-    static final String KEY_BLOOD_GLUCOSE = "blood_glucose";
+    static final String KEY_BLOOD_GLUCOSE = "bloodsugar";
+    // @TODO bloodPressure (dia, sys) 로 변경해야 함
     static final String KEY_BLOOD_PRESSURE_SYSTOLIC = "pressure_systolic";
     static final String KEY_BLOOD_PRESSURE_DIASTOLIC = "pressure_diastolic";
     static final String KEY_BLOOD_SPO2 = "spo2";
-    static final String KEY_BODY_TEMPERATURE = "body_temperature";
-    static final String KEY_HEART_RATE = "heart_rate";
+    static final String KEY_BODY_TEMPERATURE = "temperature";
+    static final String KEY_HEART_RATE = "heartRate";
 
     static final String URI_BLOOD_GLUCOSE = "/a/blood_glucose";
     static final String URI_BLOOD_PRESSURE = "/a/blood_pressure";
