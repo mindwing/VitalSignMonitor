@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/VitalSignMonitor.iml" filepath="$PROJECT_DIR$/VitalSignMonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vitalsignmonitor/vitalsignmonitor.iml" filepath="$PROJECT_DIR$/vitalsignmonitor/vitalsignmonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vitalsignserver/vitalsignserver.iml" filepath="$PROJECT_DIR$/vitalsignserver/vitalsignserver.iml" />
+    </modules>
+  </component>
+</project>
