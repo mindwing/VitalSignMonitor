@@ -217,7 +217,7 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler {
 
     private void notifyObservers(OcResourceRequest request) {
         while (true) {
-            SystemClock.sleep(10000);
+            SystemClock.sleep(1000);
 
             Log.d(TAG, "Notifying observers...");
             Log.d(TAG, toString());

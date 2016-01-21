@@ -16,7 +16,6 @@ import org.iotivity.base.ServiceType;
 
 public class ServerActivity extends Activity {
 
-
     private static final String TAG = ServerActivity.class.getSimpleName();
 
     private BloodGlucoseResource bloodGlucoseResource;

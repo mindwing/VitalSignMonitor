@@ -45,7 +45,8 @@ public abstract class ObservableData implements OcResource.OnObserveListener, Ru
         try {
             parseData(ocRepresentation);
 
-//            view.post(this);
+            Log.w(TAG, "parseData() - " + data);
+            view.post(this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to get the attribute values");
@@ -61,7 +62,7 @@ public abstract class ObservableData implements OcResource.OnObserveListener, Ru
 
     @Override
     public void run() {
-        view.setText(data);
-//        Toast.makeText(view.getContext(), data, Toast.LENGTH_SHORT).show();
+        view.setText(Integer.toString(data));
+        view.invalidate();
     }
 }

@@ -85,10 +85,6 @@ public class MonitorActivity extends Activity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        _toast("1: " + getBaseContext().toString());
-//        _toast("2: " + getApplicationContext().toString());
-//        _toast("3: " + toString());
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_monitor);
