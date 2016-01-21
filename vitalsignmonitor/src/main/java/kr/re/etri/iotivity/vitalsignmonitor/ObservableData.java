@@ -63,6 +63,6 @@ public abstract class ObservableData implements OcResource.OnObserveListener, Ru
     @Override
     public void run() {
         view.setText(Integer.toString(data));
-        view.invalidate();
+//        view.invalidate();
     }
 }
