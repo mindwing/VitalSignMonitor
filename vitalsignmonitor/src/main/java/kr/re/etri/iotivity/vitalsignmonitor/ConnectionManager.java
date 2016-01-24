@@ -1,32 +1,73 @@
 package kr.re.etri.iotivity.vitalsignmonitor;
 
-import android.app.Activity;
-import android.app.Application;
-import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
+import android.widget.TextView;
 
+import org.iotivity.base.ObserveType;
 import org.iotivity.base.OcConnectivityType;
 import org.iotivity.base.OcException;
+import org.iotivity.base.OcHeaderOption;
 import org.iotivity.base.OcPlatform;
+import org.iotivity.base.OcRepresentation;
+import org.iotivity.base.OcResource;
 
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_BLOOD_GLUCOSE;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_BLOOD_PRESSURE;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_BLOOD_SPO2;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_BODY_TEMPERATURE;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_HEART_RATE;
 import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_BLOOD_GLUCOSE;
 import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_BLOOD_PRESSURE;
 import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_BLOOD_SPO2;
 import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_BODY_TEMPERATURE;
 import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_HEART_RATE;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_BLOOD_GLUCOSE;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_BLOOD_PRESSURE;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_BLOOD_SPO2;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_BODY_TEMPERATURE;
+import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_HEART_RATE;
 
 /**
  * Created by mindwing on 2016-01-24.
  */
-public class ConnectionManager implements Application.ActivityLifecycleCallbacks {
+public class ConnectionManager implements
+        OcPlatform.OnResourceFoundListener,
+        OcResource.OnGetListener {
     private static String TAG = "ConnectionManager";
-    ResourceName lastConnectedResource;
-    Activity activity;
+
+    private TextView spo2View;
+    private TextView heartRateView;
+    private TextView bloodPressureView;
+    private TextView bodyTemperatureView;
+    private TextView bloodGlucoseView;
+
+    private OcResource foundBloodSpO2Resource;
+    private OcResource foundHeartRateResource;
+    private OcResource foundBloodPressureResource;
+    private OcResource foundBodyTemperatureResource;
+    private OcResource foundBloodGlucoseResource;
+    private BloodGlucoseData bloodGlucoseData;
+    private ResourceName lastConnectedResource;
+
+    void setup(TextView _spo2View, TextView _heartRateView, TextView _bloodPressureView,
+               TextView _bodyTemperatureView, TextView _bloodGlucoseView) {
+        spo2View = _spo2View;
+        heartRateView = _heartRateView;
+        bloodPressureView = _bloodPressureView;
+        bodyTemperatureView = _bodyTemperatureView;
+        bloodGlucoseView = _bloodGlucoseView;
+
+        bloodGlucoseData = new BloodGlucoseData(bloodGlucoseView);
+    }
 
     void connectToServer(ResourceName resource) {
-        Util.toast(activity, "trying to connect to server...");
+        Util.toast("trying to connect to server...");
 
         disconnectFromServer(lastConnectedResource);
         lastConnectedResource = null;
@@ -37,7 +78,7 @@ public class ConnectionManager implements Application.ActivityLifecycleCallbacks
                     OcPlatform.findResource("",
                             QUERY_BLOOD_SPO2,
                             EnumSet.of(OcConnectivityType.CT_DEFAULT),
-                            (OcPlatform.OnResourceFoundListener) activity
+                            this
                     );
                     break;
 
@@ -45,14 +86,15 @@ public class ConnectionManager implements Application.ActivityLifecycleCallbacks
                     OcPlatform.findResource("",
                             QUERY_HEART_RATE,
                             EnumSet.of(OcConnectivityType.CT_DEFAULT),
-                            (OcPlatform.OnResourceFoundListener) activity
+                            this
                     );
+                    break;
 
                 case BLOOD_PRESSURE:
                     OcPlatform.findResource("",
                             QUERY_BLOOD_PRESSURE,
                             EnumSet.of(OcConnectivityType.CT_DEFAULT),
-                            (OcPlatform.OnResourceFoundListener) activity
+                            this
                     );
                     break;
 
@@ -60,7 +102,7 @@ public class ConnectionManager implements Application.ActivityLifecycleCallbacks
                     OcPlatform.findResource("",
                             QUERY_BODY_TEMPERATURE,
                             EnumSet.of(OcConnectivityType.CT_DEFAULT),
-                            (OcPlatform.OnResourceFoundListener) activity
+                            this
                     );
                     break;
 
@@ -68,13 +110,13 @@ public class ConnectionManager implements Application.ActivityLifecycleCallbacks
                     OcPlatform.findResource("",
                             QUERY_BLOOD_GLUCOSE,
                             EnumSet.of(OcConnectivityType.CT_DEFAULT),
-                            (OcPlatform.OnResourceFoundListener) activity
+                            this
                     );
                     break;
 
             }
         } catch (OcException e) {
-            Util.toast(activity, e.getMessage());
+            Util.toast(e.getMessage());
             Log.e(TAG, e.toString());
         }
     }
@@ -85,37 +127,204 @@ public class ConnectionManager implements Application.ActivityLifecycleCallbacks
             return;
         }
 
-        // TODO Observation 취소할 것
+        try {
+            switch (resource) {
+                case SPO2:
+                    break;
+
+                case HEART_RATE:
+                    break;
+
+                case BLOOD_PRESSURE:
+                    break;
+
+                case BODY_TEMPERATURE:
+                    break;
+
+                case BLOOD_GLUCOSE:
+                    foundBloodGlucoseResource.cancelObserve();
+                    break;
+
+            }
+        } catch (OcException e) {
+            Util.toast(e.getMessage());
+            Log.e(TAG, e.toString());
+        }
     }
 
     @Override
-    public void onActivityCreated(Activity _activity, Bundle savedInstanceState) {
-        activity = _activity;
+    public synchronized void onResourceFound(OcResource ocResource) {
+        if (null == ocResource) {
+            Util.toast("onResourceFound():ocResource is null");
+            Log.e(TAG, "ocResource is null");
+
+            return;
+        }
+
+        // Get the resource URI
+        String resourceUri = ocResource.getUri();
+        Util.toast("onResourceFound(): resourceUri: " + resourceUri);
+        // Get the resource host address
+//        String hostAddress = ocResource.getHost();
+//        toast("onResourceFound(): hostAddress: " + hostAddress);
+
+//        for (String resourceType : ocResource.getResourceTypes()) {
+//            toast("onResourceFound(): resourceType: " + resourceType);
+//        }
+
+//        for (String resourceInterface : ocResource.getResourceInterfaces()) {
+//            toast("onResourceFound(): resourceInterface: " + resourceInterface);
+//        }
+
+//        for (OcConnectivityType connectivityType : ocResource.getConnectivityTypeSet()) {
+//            toast("onResourceFound(): connectivityType: " + connectivityType);
+//        }
+
+        switch (resourceUri) {
+            case URI_BLOOD_SPO2:
+                foundBloodSpO2Resource = ocResource;
+                getBloodSpO2ResourceRepresentation();
+                break;
+
+            case URI_HEART_RATE:
+                foundHeartRateResource = ocResource;
+                getHeartBeatResourceRepresentation();
+                break;
+
+            case URI_BLOOD_PRESSURE:
+                foundBloodPressureResource = ocResource;
+                getBloodPressureResourceRepresentation();
+                break;
+
+            case URI_BODY_TEMPERATURE:
+                foundBodyTemperatureResource = ocResource;
+                getBodyTemperatureResourceRepresentation();
+                break;
+
+            case URI_BLOOD_GLUCOSE:
+                foundBloodGlucoseResource = ocResource;
+                getBloodGlucoseResourceRepresentation();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void getBloodGlucoseResourceRepresentation() {
+        Util.toast("Getting Blood Glucose Representation...");
+
+        Map<String, String> queryParams = new HashMap<>();
+        try {
+            SystemClock.sleep(1);
+            foundBloodGlucoseResource.get(queryParams, this);
+        } catch (OcException e) {
+            Log.e(TAG, e.toString());
+            Util.toast("Error occurred while invoking \"get\" API");
+        }
+    }
+
+    private void getBloodPressureResourceRepresentation() {
+        Util.toast("Getting Blood Pressure Representation...");
+
+        Map<String, String> queryParams = new HashMap<>();
+        try {
+            SystemClock.sleep(1);
+            foundBloodPressureResource.get(queryParams, this);
+        } catch (OcException e) {
+            Log.e(TAG, e.toString());
+            Util.toast("Error occurred while invoking \"get\" API");
+        }
+    }
+
+    private void getBloodSpO2ResourceRepresentation() {
+        Util.toast("Getting Blood SpO2 Representation...");
+
+        Map<String, String> queryParams = new HashMap<>();
+        try {
+            SystemClock.sleep(1);
+            foundBloodSpO2Resource.get(queryParams, this);
+        } catch (OcException e) {
+            Log.e(TAG, e.toString());
+            Util.toast("Error occurred while invoking \"get\" API");
+        }
+    }
+
+    private void getBodyTemperatureResourceRepresentation() {
+        Util.toast("Getting Body Temperature Representation...");
+
+        Map<String, String> queryParams = new HashMap<>();
+        try {
+            SystemClock.sleep(1);
+            foundBodyTemperatureResource.get(queryParams, this);
+        } catch (OcException e) {
+            Log.e(TAG, e.toString());
+            Util.toast("Error occurred while invoking \"get\" API");
+        }
+    }
+
+    private void getHeartBeatResourceRepresentation() {
+        Util.toast("Getting HeartBeat Representation...");
+
+        Map<String, String> queryParams = new HashMap<>();
+        try {
+            SystemClock.sleep(1);
+            foundHeartRateResource.get(queryParams, this);
+        } catch (OcException e) {
+            Log.e(TAG, e.toString());
+            Util.toast("Error occurred while invoking \"get\" API");
+        }
     }
 
     @Override
-    public void onActivityStarted(Activity _activity) {
-        activity = _activity;
+    public void onGetCompleted(List<OcHeaderOption> list, final OcRepresentation ocRepresentation) {
+        Util.runOnCurrentUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String resourceUri = ocRepresentation.getUri();
+                Log.w(TAG, "getUri(): " + ocRepresentation.getUri());
+
+                try {
+                    switch (resourceUri) {
+                        case URI_BLOOD_GLUCOSE:
+                            bloodGlucoseView.setText(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE).toString());
+                            SystemClock.sleep(1);
+
+                            foundBloodGlucoseResource.observe(
+                                    ObserveType.OBSERVE,
+                                    new HashMap<String, String>(),
+                                    bloodGlucoseData);
+                            break;
+
+                        case URI_BLOOD_PRESSURE:
+                            bloodPressureView.setText(ocRepresentation.getValue(KEY_BLOOD_PRESSURE).toString());
+                            break;
+
+                        case URI_BLOOD_SPO2:
+                            spo2View.setText(ocRepresentation.getValue(KEY_BLOOD_SPO2).toString());
+                            break;
+
+                        case URI_BODY_TEMPERATURE:
+                            bodyTemperatureView.setText(ocRepresentation.getValue(KEY_BODY_TEMPERATURE).toString());
+                            break;
+
+                        case URI_HEART_RATE:
+                            heartRateView.setText(ocRepresentation.getValue(KEY_HEART_RATE).toString());
+                            break;
+
+                        default:
+                            break;
+                    }
+                } catch (OcException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
-    public void onActivityResumed(Activity _activity) {
-        activity = _activity;
-    }
-
-    @Override
-    public void onActivityPaused(Activity activity) {
-    }
-
-    @Override
-    public void onActivityStopped(Activity activity) {
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-    }
-
-    @Override
-    public void onActivityDestroyed(Activity activity) {
+    public synchronized void onGetFailed(Throwable throwable) {
+        Util.toast(throwable.getMessage());
+        Log.e(TAG, throwable.getMessage(), throwable);
     }
 }
