@@ -12,6 +12,7 @@ public class BloodPressureResource extends HealthCareResource {
 
     private int systolicPressure = 120;
     private int diastolicPressure = 80;
+    private String bloodPressure = "120/80";
 
     public BloodPressureResource(String _name) {
         name = _name;
@@ -24,10 +25,8 @@ public class BloodPressureResource extends HealthCareResource {
     public void setOcRepresentation(OcRepresentation rep) {
         try {
             if (rep.hasAttribute(KEY_NAME)) name = rep.getValue(KEY_NAME);
-            if (rep.hasAttribute(KEY_BLOOD_PRESSURE_SYSTOLIC))
-                systolicPressure = rep.getValue(KEY_BLOOD_PRESSURE_SYSTOLIC);
-            if (rep.hasAttribute(KEY_BLOOD_PRESSURE_DIASTOLIC))
-                diastolicPressure = rep.getValue(KEY_BLOOD_PRESSURE_DIASTOLIC);
+            if (rep.hasAttribute(KEY_BLOOD_PRESSURE))
+                bloodPressure = rep.getValue(KEY_BLOOD_PRESSURE);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to get representation values");
@@ -39,8 +38,7 @@ public class BloodPressureResource extends HealthCareResource {
         OcRepresentation rep = new OcRepresentation();
         try {
             rep.setValue(KEY_NAME, name);
-            rep.setValue(KEY_BLOOD_PRESSURE_SYSTOLIC, systolicPressure);
-            rep.setValue(KEY_BLOOD_PRESSURE_DIASTOLIC, diastolicPressure);
+            rep.setValue(KEY_BLOOD_PRESSURE, bloodPressure);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to set representation values");

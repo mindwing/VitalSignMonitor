@@ -33,349 +33,268 @@
         android:text="== Vital Sign ==" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/vitalPane"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/data_label"
-        android:orientation="vertical">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/line_spo2"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
+            android:id="@+id/toggleButtons"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/data_label"
-            android:orientation="horizontal">
+            android:layout_weight="3"
+            android:orientation="vertical">
 
-            <TextView
+            <ToggleButton
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:background="#dfdfdf"
-                android:gravity="center"
-                android:text="[SpO2]" />
+                android:onClick="toggleConnection"
+                android:tag="SPO2"
+                android:textAllCaps="false"
+                android:textOff="SpO2"
+                android:textOn="[ SpO2 ]" />
+
+            <ToggleButton
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="toggleConnection"
+                android:tag="HEART_RATE"
+                android:textAllCaps="false"
+                android:textOff="심박수"
+                android:textOn="[ 심박수 ]" />
+
+            <ToggleButton
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="toggleConnection"
+                android:tag="BLOOD_PRESSURE"
+                android:textAllCaps="false"
+                android:textOff="혈압"
+                android:textOn="[ 혈압 ]" />
+
+            <ToggleButton
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="toggleConnection"
+                android:tag="BODY_TEMPERATURE"
+                android:textAllCaps="false"
+                android:textOff="체온"
+                android:textOn="[ 체온 ]" />
+
+            <ToggleButton
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:onClick="toggleConnection"
+                android:tag="BLOOD_GLUCOSE"
+                android:textAllCaps="false"
+                android:textOff="혈당"
+                android:textOn="[ 혈당 ]" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="2"
+            android:background="#efefef"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/spo2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                android:id="@+id/spo2_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:id="@+id/heart_rate"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="#ef7f7f"
+                android:background="#e0e0e0"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                android:id="@+id/spo2_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:id="@+id/blood_pressure"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="#af7f7f"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                android:id="@+id/spo2_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:id="@+id/body_temp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="#7f7f7f"
+                android:background="#e0e0e0"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/blood_glucose"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="0" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/line_heart_rate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/data_label"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="#ef7f7f"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="#dfdfdf"
-                android:gravity="center"
-                android:text="[심박수]" />
-
-            <TextView
-                android:id="@+id/heart_rate"
-                android:layout_width="wrap_content"
+                android:id="@+id/spo2_1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
                 android:id="@+id/heart_rate_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="#ef7f7f"
+                android:background="#e07070"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                android:id="@+id/heart_rate_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:id="@+id/blood_pressure_1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="#af7f7f"
-                android:gravity="center"
-                android:text="0" />
-
-            <TextView
-                android:id="@+id/heart_rate_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="#7f7f7f"
-                android:gravity="center"
-                android:text="0" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/line_systolic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/data_label"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="#dfdfdf"
-                android:gravity="center"
-                android:text="[수축기혈압]" />
-
-            <TextView
-                android:id="@+id/systolic"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="0" />
-
-            <TextView
-                android:id="@+id/systolic_1"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#ef7f7f"
-                android:gravity="center"
-                android:text="0" />
-
-            <TextView
-                android:id="@+id/systolic_2"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#af7f7f"
-                android:gravity="center"
-                android:text="0" />
-
-            <TextView
-                android:id="@+id/systolic_3"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#7f7f7f"
-                android:gravity="center"
-                android:text="0" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/line_diastolic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/data_label"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="#dfdfdf"
-                android:gravity="center"
-                android:text="[이완기혈압]" />
-
-            <TextView
-                android:id="@+id/diastolic"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="0" />
-
-            <TextView
-                android:id="@+id/diastolic_1"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#ef7f7f"
-                android:gravity="center"
-                android:text="0" />
-
-            <TextView
-                android:id="@+id/diastolic_2"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#af7f7f"
-                android:gravity="center"
-                android:text="0" />
-
-            <TextView
-                android:id="@+id/diastolic_3"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#7f7f7f"
-                android:gravity="center"
-                android:text="0" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/line_body_temp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/data_label"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="#dfdfdf"
-                android:gravity="center"
-                android:text="[체온]" />
-
-            <TextView
-                android:id="@+id/body_temp"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
                 android:id="@+id/body_temp_1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#ef7f7f"
+                android:background="#e07070"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/blood_glucose_1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="0" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="#af7f7f"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/spo2_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/heart_rate_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#a07070"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/blood_pressure_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
                 android:id="@+id/body_temp_2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#af7f7f"
+                android:background="#a07070"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                android:id="@+id/body_temp_3"
-                android:layout_width="wrap_content"
+                android:id="@+id/blood_glucose_2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#7f7f7f"
                 android:gravity="center"
                 android:text="0" />
         </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/line_glucose"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/data_label"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="#7f7f7f"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:background="#dfdfdf"
-                android:gravity="center"
-                android:text="[혈당]" />
-
-            <TextView
-                android:id="@+id/glucose"
-                android:layout_width="wrap_content"
+                android:id="@+id/spo2_3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                android:id="@+id/glucose_1"
-                android:layout_width="wrap_content"
+                android:id="@+id/heart_rate_3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#ef7f7f"
+                android:background="#707070"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                android:id="@+id/glucose_2"
-                android:layout_width="wrap_content"
+                android:id="@+id/blood_pressure_3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#af7f7f"
                 android:gravity="center"
                 android:text="0" />
 
             <TextView
-                android:id="@+id/glucose_3"
-                android:layout_width="wrap_content"
+                android:id="@+id/body_temp_3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="#7f7f7f"
+                android:background="#707070"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/blood_glucose_3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="0" />
         </LinearLayout>
     </LinearLayout>
-
-    <ToggleButton
-        android:id="@+id/connect"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:onClick="toggleConnection"
-        android:textAllCaps="false"
-        android:textOff="Press here to connect to Vital Sign Device"
-        android:textOn="Press here to disconnect from Vital Sign Device" />
 
 </RelativeLayout>
