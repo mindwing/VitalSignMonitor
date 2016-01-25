@@ -22,11 +22,8 @@ public class BloodGlucoseResource extends HealthCareResource {
         resourceType = RESOURCE_TYPE_BLOOD_GLUCOSE;
     }
 
-    private int diff = 1;
-
     public void changeValue() {
-        diff *= -1;
-        glucose += diff;
+        glucose += getRandomNumber();
     }
 
     @Override

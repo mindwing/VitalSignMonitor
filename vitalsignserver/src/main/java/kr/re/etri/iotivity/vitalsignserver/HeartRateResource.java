@@ -22,11 +22,8 @@ public class HeartRateResource extends HealthCareResource {
         resourceType = RESOURCE_TYPE_HEART_RATE;
     }
 
-    private int diff = 1;
-
     public void changeValue() {
-        diff *= -1;
-        heartRate += diff;
+        heartRate += getRandomNumber();
     }
 
     @Override

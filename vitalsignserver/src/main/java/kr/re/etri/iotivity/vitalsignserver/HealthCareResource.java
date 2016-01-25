@@ -20,6 +20,7 @@ import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by mindwing on 2016-01-20.
@@ -32,6 +33,8 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
     String resourceType;                // resource type
     String resourceInterface = OcPlatform.DEFAULT_INTERFACE;          // resource interface.
     String name;                        // resource name
+
+    private static Random random = new Random();
 
     private final static int SUCCESS = 200;
     //    private boolean mIsSlowResponse = false;
@@ -245,6 +248,10 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
 //    public void setContext(Context context) {
 //        mContext = context;
 //    }
+
+    public int getRandomNumber() {
+        return random.nextInt(7) - 3;
+    }
 
     @Override
     public String toString() {

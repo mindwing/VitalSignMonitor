@@ -22,11 +22,8 @@ public class BodyTemperatureResource extends HealthCareResource {
         resourceType = RESOURCE_TYPE_BODY_TEMPERATURE;
     }
 
-    private int diff = 1;
-
     public void changeValue() {
-        diff *= -1;
-        bodyTemperature += diff;
+        bodyTemperature += getRandomNumber();
     }
 
     @Override
