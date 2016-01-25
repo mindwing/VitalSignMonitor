@@ -5,6 +5,8 @@ import android.util.Log;
 import org.iotivity.base.OcException;
 import org.iotivity.base.OcRepresentation;
 
+import kr.re.etri.iotivity.smartwearable.HealthCareResource;
+
 /**
  * Created by mindwing on 2016-01-20.
  *
@@ -22,7 +24,7 @@ public class BloodSpO2Resource extends HealthCareResource {
         resourceType = RESOURCE_TYPE_BLOOD_SPO2;
     }
 
-    public void changeValue() {
+    void changeValue() {
         spO2 += getRandomNumber();
     }
 

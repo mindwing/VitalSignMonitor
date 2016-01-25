@@ -1,4 +1,4 @@
-package kr.re.etri.iotivity.vitalsignmonitor;
+package kr.re.etri.iotivity.smartwearable;
 
 import android.util.Log;
 import android.widget.TextView;
@@ -9,22 +9,22 @@ import org.iotivity.base.OcRepresentation;
 import java.util.Observer;
 
 /**
- * Created by mindwing on 2016-01-20.
- *
- * Property name: bloodsugar
+ * 혈중 산소포화도에 대한 Observer 클래스
+ * <br>
+ * Property name: spo2
  * Value type: number
  */
-public class BloodGlucoseObservableData<Integer> extends ObservableData {
+public class BloodSpO2ObservableData<Integer> extends ObservableData {
 
-    public BloodGlucoseObservableData(TextView _view, Observer _observer) {
+    public BloodSpO2ObservableData(TextView _view, Observer _observer) {
         super(_view, _observer);
     }
 
     @Override
     public void parseData(OcRepresentation ocRepresentation) throws OcException {
         try {
-            if (ocRepresentation.hasAttribute(KEY_BLOOD_GLUCOSE)) {
-                data = ocRepresentation.getValue(KEY_BLOOD_GLUCOSE);
+            if (ocRepresentation.hasAttribute(KEY_BLOOD_SPO2)) {
+                data = ocRepresentation.getValue(KEY_BLOOD_SPO2);
 
                 notifyObserver();
             }
@@ -32,11 +32,6 @@ public class BloodGlucoseObservableData<Integer> extends ObservableData {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to get representation values");
         }
-    }
-
-    @Override
-    public synchronized void onObserveFailed(Throwable ex) {
-
     }
 }
 

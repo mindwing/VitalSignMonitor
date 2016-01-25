@@ -1,4 +1,4 @@
-package kr.re.etri.iotivity.vitalsignmonitor;
+package kr.re.etri.iotivity.smartwearable;
 
 import android.util.Log;
 import android.widget.TextView;
@@ -9,8 +9,8 @@ import org.iotivity.base.OcRepresentation;
 import java.util.Observer;
 
 /**
- * Created by mindwing on 2016-01-20.
- * <p/>
+ * 체온에 대한 Observer 클래스
+ * <br>
  * Property name: temperature
  * Value type: number
  */
@@ -32,11 +32,6 @@ public class BodyTemperatureObservableData<Integer> extends ObservableData {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to get representation values");
         }
-    }
-
-    @Override
-    public synchronized void onObserveFailed(Throwable ex) {
-
     }
 }
 

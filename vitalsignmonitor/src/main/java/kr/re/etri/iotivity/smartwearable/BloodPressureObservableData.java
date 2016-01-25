@@ -1,4 +1,4 @@
-package kr.re.etri.iotivity.vitalsignmonitor;
+package kr.re.etri.iotivity.smartwearable;
 
 import android.util.Log;
 import android.widget.TextView;
@@ -9,22 +9,22 @@ import org.iotivity.base.OcRepresentation;
 import java.util.Observer;
 
 /**
- * Created by mindwing on 2016-01-20.
- * <p/>
- * Property name: heartRate
- * Value type: number
+ * 혈압에 대한 Observer 클래스
+ * <br>
+ * Property name: bloodPressure
+ * Value type: string
  */
-public class HeartRateObservableData<Integer> extends ObservableData {
+public class BloodPressureObservableData<String> extends ObservableData {
 
-    public HeartRateObservableData(TextView _view, Observer _observer) {
+    public BloodPressureObservableData(TextView _view, Observer _observer) {
         super(_view, _observer);
     }
 
     @Override
     public void parseData(OcRepresentation ocRepresentation) throws OcException {
         try {
-            if (ocRepresentation.hasAttribute(KEY_HEART_RATE)) {
-                data = ocRepresentation.getValue(KEY_HEART_RATE);
+            if (ocRepresentation.hasAttribute(KEY_BLOOD_PRESSURE)) {
+                data = ocRepresentation.getValue(KEY_BLOOD_PRESSURE);
 
                 notifyObserver();
             }
@@ -32,11 +32,6 @@ public class HeartRateObservableData<Integer> extends ObservableData {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to get representation values");
         }
-    }
-
-    @Override
-    public synchronized void onObserveFailed(Throwable ex) {
-
     }
 }
 
