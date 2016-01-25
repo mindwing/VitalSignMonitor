@@ -12,53 +12,58 @@ import org.iotivity.base.OcPlatform;
 import org.iotivity.base.OcRepresentation;
 import org.iotivity.base.OcResource;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by mindwing on 2016-01-24.
  */
 public class ConnectionManager implements
+        Observer,
         HealthCareResourceSpec,
         OcPlatform.OnResourceFoundListener,
         OcResource.OnGetListener {
     private static String TAG = "ConnectionManager";
 
-//    private TextView spo2View;
-//    private TextView heartRateView;
-//    private TextView bloodPressureView;
-//    private TextView bodyTemperatureView;
-//    private TextView bloodGlucoseView;
+    private TextView updateDate;
+    Runnable updateDateRunner = new Runnable() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
+        @Override
+        public void run() {
+            String date = dateFormat.format(new Date());
+            updateDate.setText(date);
+        }
+    };
     private OcResource foundBloodSpO2Resource;
     private OcResource foundHeartRateResource;
     private OcResource foundBloodPressureResource;
     private OcResource foundBodyTemperatureResource;
     private OcResource foundBloodGlucoseResource;
-
     private BloodSpO2ObservableData bloodSpO2Data;
     private HeartRateObservableData heartRateObservableData;
     private BloodPressureObservableData bloodPressureObservableData;
     private BodyTemperatureObservableData bodyTemperatureObservableData;
     private BloodGlucoseObservableData bloodGlucoseData;
-
     private ResourceName lastConnectedResource;
 
-    void setup(TextView _spo2View, TextView _heartRateView, TextView _bloodPressureView,
+    void setup(TextView _updateDate, TextView _spo2View, TextView _heartRateView, TextView _bloodPressureView,
                TextView _bodyTemperatureView, TextView _bloodGlucoseView) {
-//        spo2View = _spo2View;
-//        heartRateView = _heartRateView;
-//        bloodPressureView = _bloodPressureView;
-//        bodyTemperatureView = _bodyTemperatureView;
-//        bloodGlucoseView = _bloodGlucoseView;
+        updateDate = _updateDate;
 
-        bloodSpO2Data = new BloodSpO2ObservableData(_spo2View);
-        heartRateObservableData = new HeartRateObservableData(_heartRateView);
-        bloodPressureObservableData = new BloodPressureObservableData(_bloodPressureView);
-        bodyTemperatureObservableData = new BodyTemperatureObservableData(_bodyTemperatureView);
-        bloodGlucoseData = new BloodGlucoseObservableData(_bloodGlucoseView);
+        bloodSpO2Data = new BloodSpO2ObservableData(_spo2View, this);
+        heartRateObservableData = new HeartRateObservableData(_heartRateView, this);
+        bloodPressureObservableData = new BloodPressureObservableData(_bloodPressureView, this);
+        bodyTemperatureObservableData = new BodyTemperatureObservableData(_bodyTemperatureView, this);
+        bloodGlucoseData = new BloodGlucoseObservableData(_bloodGlucoseView, this);
     }
 
     void connectToServer(ResourceName resource) {
@@ -283,74 +288,76 @@ public class ConnectionManager implements
 
     @Override
     public void onGetCompleted(List<OcHeaderOption> list, final OcRepresentation ocRepresentation) {
-        Util.runOnCurrentUiThread(new Runnable() {
-            @Override
-            public void run() {
-                String resourceUri = ocRepresentation.getUri();
-                Log.w(TAG, "getUri(): " + ocRepresentation.getUri());
+        String resourceUri = ocRepresentation.getUri();
+        Log.w(TAG, "getUri(): " + ocRepresentation.getUri());
 
-                try {
-                    switch (resourceUri) {
-                        case URI_BLOOD_SPO2:
-                            bloodSpO2Data.setData(ocRepresentation.getValue(KEY_BLOOD_SPO2));
+        try {
+            switch (resourceUri) {
+                case URI_BLOOD_SPO2:
+                    bloodSpO2Data.setData(ocRepresentation.getValue(KEY_BLOOD_SPO2));
 
-                            foundBloodSpO2Resource.observe(
-                                    ObserveType.OBSERVE,
-                                    new HashMap<String, String>(),
-                                    bloodSpO2Data);
-                            break;
+                    foundBloodSpO2Resource.observe(
+                            ObserveType.OBSERVE,
+                            new HashMap<String, String>(),
+                            bloodSpO2Data);
+                    break;
 
-                        case URI_HEART_RATE:
-                            heartRateObservableData.setData(ocRepresentation.getValue(KEY_HEART_RATE));
+                case URI_HEART_RATE:
+                    heartRateObservableData.setData(ocRepresentation.getValue(KEY_HEART_RATE));
 
-                            foundHeartRateResource.observe(
-                                    ObserveType.OBSERVE,
-                                    new HashMap<String, String>(),
-                                    heartRateObservableData);
-                            break;
+                    foundHeartRateResource.observe(
+                            ObserveType.OBSERVE,
+                            new HashMap<String, String>(),
+                            heartRateObservableData);
+                    break;
 
-                        case URI_BLOOD_PRESSURE:
-                            bloodPressureObservableData.setData(ocRepresentation.getValue(KEY_BLOOD_PRESSURE));
+                case URI_BLOOD_PRESSURE:
+                    bloodPressureObservableData.setData(ocRepresentation.getValue(KEY_BLOOD_PRESSURE));
 
-                            foundBloodPressureResource.observe(
-                                    ObserveType.OBSERVE,
-                                    new HashMap<String, String>(),
-                                    bloodPressureObservableData);
-                            break;
+                    foundBloodPressureResource.observe(
+                            ObserveType.OBSERVE,
+                            new HashMap<String, String>(),
+                            bloodPressureObservableData);
+                    break;
 
-                        case URI_BODY_TEMPERATURE:
-                            bodyTemperatureObservableData.setData(ocRepresentation.getValue(KEY_BODY_TEMPERATURE));
-                            SystemClock.sleep(1);
+                case URI_BODY_TEMPERATURE:
+                    bodyTemperatureObservableData.setData(ocRepresentation.getValue(KEY_BODY_TEMPERATURE));
+                    SystemClock.sleep(1);
 
-                            foundBodyTemperatureResource.observe(
-                                    ObserveType.OBSERVE,
-                                    new HashMap<String, String>(),
-                                    bodyTemperatureObservableData);
-                            break;
+                    foundBodyTemperatureResource.observe(
+                            ObserveType.OBSERVE,
+                            new HashMap<String, String>(),
+                            bodyTemperatureObservableData);
+                    break;
 
-                        case URI_BLOOD_GLUCOSE:
-                            bloodGlucoseData.setData(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE));
-                            SystemClock.sleep(1);
+                case URI_BLOOD_GLUCOSE:
+                    bloodGlucoseData.setData(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE));
+                    SystemClock.sleep(1);
 
-                            foundBloodGlucoseResource.observe(
-                                    ObserveType.OBSERVE,
-                                    new HashMap<String, String>(),
-                                    bloodGlucoseData);
-                            break;
+                    foundBloodGlucoseResource.observe(
+                            ObserveType.OBSERVE,
+                            new HashMap<String, String>(),
+                            bloodGlucoseData);
+                    break;
 
-                        default:
-                            break;
-                    }
-                } catch (OcException e) {
-                    e.printStackTrace();
-                }
+                default:
+                    break;
             }
-        });
+        } catch (OcException e) {
+            e.printStackTrace();
+        }
+
+        update(null, null);
     }
 
     @Override
     public synchronized void onGetFailed(Throwable throwable) {
         Util.toast(throwable.getMessage());
         Log.e(TAG, throwable.getMessage(), throwable);
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        updateDate.post(updateDateRunner);
     }
 }

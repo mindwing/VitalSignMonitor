@@ -22,21 +22,13 @@ public class MonitorActivity extends Activity {
 
     private ConnectionManager connManager = new ConnectionManager();
 
+    private TextView updateDate;
+
     private TextView[] spo2View = new TextView[4];
     private TextView[] heartRateView = new TextView[4];
     private TextView[] bloodPressureView = new TextView[4];
     private TextView[] bodyTemperatureView = new TextView[4];
     private TextView[] bloodGlucoseView = new TextView[4];
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            if (msg.what == GATHERING_PER_10SEC) {
-            }
-        }
-    };
 
     //
     // BEGIN
@@ -53,12 +45,14 @@ public class MonitorActivity extends Activity {
         setContentView(R.layout.activity_monitor);
 
         setupView();
-        connManager.setup(spo2View[0], heartRateView[0], bloodPressureView[0], bodyTemperatureView[0], bloodGlucoseView[0]);
+        connManager.setup(updateDate, spo2View[0], heartRateView[0], bloodPressureView[0], bodyTemperatureView[0], bloodGlucoseView[0]);
 
         prepareConfiguration();
     }
 
     private void setupView() {
+        updateDate = (TextView) findViewById(R.id.update_date);
+
         spo2View[0] = (TextView) findViewById(R.id.spo2);
         spo2View[1] = (TextView) findViewById(R.id.spo2_1);
         spo2View[2] = (TextView) findViewById(R.id.spo2_2);

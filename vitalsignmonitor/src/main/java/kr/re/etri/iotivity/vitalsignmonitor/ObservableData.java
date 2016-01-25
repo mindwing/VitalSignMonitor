@@ -9,6 +9,7 @@ import org.iotivity.base.OcRepresentation;
 import org.iotivity.base.OcResource;
 
 import java.util.List;
+import java.util.Observer;
 
 /**
  * Created by mindwing on 2016-01-20.
@@ -19,12 +20,15 @@ public abstract class ObservableData<T> implements
         Runnable {
     String TAG;
 
+    Observer observer;
     TextView view;
 
     T data;
 
-    public ObservableData(TextView _view) {
+    public ObservableData(TextView _view, Observer _observer) {
         view = _view;
+        observer = _observer;
+
         TAG = getClass().getSimpleName();
     }
 
@@ -63,7 +67,11 @@ public abstract class ObservableData<T> implements
     public void setData(T _data) {
         data = _data;
 
-        view.setText(_data.toString());
+        view.post(this);
+    }
+
+    void notifyObserver() {
+        observer.update(null, null);
     }
 
     @Override
