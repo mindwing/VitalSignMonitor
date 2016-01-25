@@ -1,4 +1,4 @@
-package kr.re.etri.iotivity.vitalsignmonitor;
+package kr.re.etri.iotivity.smartwearable;
 
 import android.util.Log;
 import android.widget.TextView;
@@ -9,22 +9,22 @@ import org.iotivity.base.OcRepresentation;
 import java.util.Observer;
 
 /**
- * Created by mindwing on 2016-01-20.
- * <p/>
- * Property name: bloodPressure
- * Value type: string
+ * 혈당에 대한 Observer 클래스
+ * <br>
+ * Property name: bloodsugar
+ * Value type: number
  */
-public class BloodPressureObservableData<String> extends ObservableData {
+public class BloodGlucoseObservableData<Integer> extends ObservableData {
 
-    public BloodPressureObservableData(TextView _view, Observer _observer) {
+    public BloodGlucoseObservableData(TextView _view, Observer _observer) {
         super(_view, _observer);
     }
 
     @Override
     public void parseData(OcRepresentation ocRepresentation) throws OcException {
         try {
-            if (ocRepresentation.hasAttribute(KEY_BLOOD_PRESSURE)) {
-                data = ocRepresentation.getValue(KEY_BLOOD_PRESSURE);
+            if (ocRepresentation.hasAttribute(KEY_BLOOD_GLUCOSE)) {
+                data = ocRepresentation.getValue(KEY_BLOOD_GLUCOSE);
 
                 notifyObserver();
             }

@@ -3,8 +3,6 @@ package kr.re.etri.iotivity.vitalsignmonitor;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -15,10 +13,19 @@ import org.iotivity.base.PlatformConfig;
 import org.iotivity.base.QualityOfService;
 import org.iotivity.base.ServiceType;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
+
+import kr.re.etri.iotivity.smartwearable.ConnectionManager;
+import kr.re.etri.iotivity.smartwearable.ResourceName;
+
 public class MonitorActivity extends Activity {
 
     private static final String TAG = MonitorActivity.class.getSimpleName();
-    private static final int GATHERING_PER_10SEC = 0x1;
 
     private ConnectionManager connManager = new ConnectionManager();
 
@@ -30,10 +37,22 @@ public class MonitorActivity extends Activity {
     private TextView[] bodyTemperatureView = new TextView[4];
     private TextView[] bloodGlucoseView = new TextView[4];
 
-    //
-    // BEGIN
-    // Activity Part
-    //
+    private class UpdateDateRunner implements Runnable, Observer {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        @Override
+        public void run() {
+            String date = dateFormat.format(new Date());
+            updateDate.setText(date);
+        }
+
+        @Override
+        public void update(Observable observable, Object data) {
+            updateDate.post(this);
+        }
+    }
+
+    private UpdateDateRunner updateDateRunner = new UpdateDateRunner();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +64,7 @@ public class MonitorActivity extends Activity {
         setContentView(R.layout.activity_monitor);
 
         setupView();
-        connManager.setup(updateDate, spo2View[0], heartRateView[0], bloodPressureView[0], bodyTemperatureView[0], bloodGlucoseView[0]);
+        connManager.setup(updateDateRunner, spo2View[0], heartRateView[0], bloodPressureView[0], bodyTemperatureView[0], bloodGlucoseView[0]);
 
         prepareConfiguration();
     }

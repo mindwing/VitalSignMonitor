@@ -1,4 +1,4 @@
-package kr.re.etri.iotivity.vitalsignserver;
+package kr.re.etri.iotivity.smartwearable;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -17,35 +17,39 @@ import org.iotivity.base.RequestType;
 import org.iotivity.base.ResourceProperty;
 
 import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 /**
- * Created by mindwing on 2016-01-20.
+ * HealthCare 에 대한 추상황된 Observer 클래스이며, Server 에서 각종 Resoure 를 관리하기 위해 사용가능함
  */
 public abstract class HealthCareResource implements OcPlatform.EntityHandler, HealthCareResourceSpec {
-    static String TAG;
+    public static String TAG;
 
     OcResourceHandle resourceHandle;    // resource handle
-    String resourceUri;                 // resource URI
-    String resourceType;                // resource type
+    public String resourceUri;                 // resource URI
+    public String resourceType;                // resource type
     String resourceInterface = OcPlatform.DEFAULT_INTERFACE;          // resource interface.
-    String name;                        // resource name
+    public String name;                        // resource name
 
     private static Random random = new Random();
 
     private final static int SUCCESS = 200;
-    //    private boolean mIsSlowResponse = false;
-    boolean isListOfObservers = false;
 
     public HealthCareResource() {
         TAG = getClass().getSimpleName();
     }
 
+    /**
+     * PUT 에 대응하기 위한 추상메서드
+     * @param rep 새로운 상태를 담고 있는 객체
+     */
     public abstract void setOcRepresentation(OcRepresentation rep);
 
+    /**
+     * GET 에 대응하기 위한 추상메서드
+     * @return OcRepresentation 현상태를 담고 있는 객체
+     */
     public abstract OcRepresentation getCurrentRepresentation();
 
     public synchronized void registerResource() throws OcException {
@@ -118,7 +122,6 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
                 break;
             case DELETE:
                 Log.d(TAG, "\t\t\tRequest Type is DELETE");
-//                ehResult = handleDeleteRequest();
                 break;
         }
         return ehResult;
@@ -130,37 +133,14 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
         response.setRequestHandle(request.getRequestHandle());
         response.setResourceHandle(request.getResourceHandle());
 
-//        if (mIsSlowResponse) { // Slow response case
-//            new Thread(new Runnable() {
-//                public void run() {
-//                    handleSlowResponse(request);
-//                }
-//            }).start();
-//            ehResult = EntityHandlerResult.SLOW;
-//        } else { // normal response case.
         response.setErrorCode(SUCCESS);
         response.setResponseResult(EntityHandlerResult.OK);
         response.setResourceRepresentation(getCurrentRepresentation());
         ehResult = sendResponse(response);
-//        }
+
         return ehResult;
     }
 
-//    private void handleSlowResponse(OcResourceRequest request) {
-//        SystemClock.sleep(10);
-//
-//        Log.d(TAG, "Sending slow response...");
-//        OcResourceResponse response = new OcResourceResponse();
-//        response.setRequestHandle(request.getRequestHandle());
-//        response.setResourceHandle(request.getResourceHandle());
-//
-//        response.setErrorCode(SUCCESS);
-//        response.setResponseResult(EntityHandlerResult.OK);
-//        response.setResourceRepresentation(getOcRepresentation());
-//        sendResponse(response);
-//    }
-
-//    private Byte mObservationId;
     private Thread notifyThread;
 
     private synchronized EntityHandlerResult handleObserver(final OcResourceRequest request) {
@@ -189,7 +169,7 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
         return EntityHandlerResult.OK;
     }
 
-    public void changeValue() {}
+    void changeValue() {}
 
     private void notifyObservers(OcResourceRequest request) {
         while (true) {
@@ -199,18 +179,8 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
             Log.d(TAG, toString());
 
             try {
-//                if (isListOfObservers) {
-//                    OcResourceResponse response = new OcResourceResponse();
-//                    response.setErrorCode(SUCCESS);
-//                    response.setResourceRepresentation(getOcRepresentation());
-//                    OcPlatform.notifyListOfObservers(
-//                            bloodPressureResourceHandle,
-//                            mObservationIds,
-//                            response);
-//                } else {
                 changeValue();
                 OcPlatform.notifyAllObservers(resourceHandle);
-//                }
             } catch (OcException e) {
                 ErrorCode errorCode = e.getErrorCode();
                 if (ErrorCode.NO_OBSERVERS == errorCode) {
@@ -237,18 +207,6 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
         }
     }
 
-//    public void setSlowResponse(boolean isSlowResponse) {
-//        mIsSlowResponse = isSlowResponse;
-//    }
-
-//    public void useListOfObservers(boolean isListOfObservers) {
-//        isListOfObservers = isListOfObservers;
-//    }
-
-//    public void setContext(Context context) {
-//        mContext = context;
-//    }
-
     public int getRandomNumber() {
         return random.nextInt(7) - 3;
     }
@@ -258,12 +216,4 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
         return "\t" + "URI" + ": " + resourceUri +
                 "\n\t" + KEY_NAME + ": " + name;
     }
-
-//    private void msg(String text) {
-//        if (null != mContext) {
-//            Intent intent = new Intent("org.iotivity.base.examples.simpleserver");
-//            intent.putExtra("message", text);
-//            mContext.sendBroadcast(intent);
-//        }
-//    }
 }

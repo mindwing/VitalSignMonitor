@@ -1,10 +1,8 @@
-package kr.re.etri.iotivity.vitalsignmonitor;
+package kr.re.etri.iotivity.smartwearable;
 
 import org.iotivity.base.OcPlatform;
 
 /**
- * Created by mindwing on 2016-01-20.
- *
  * OIC_Healthcare_Resource_Specification_v0.2.1
  */
 public interface HealthCareResourceSpec {

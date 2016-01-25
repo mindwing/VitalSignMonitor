@@ -1,4 +1,4 @@
-package kr.re.etri.iotivity.vitalsignmonitor;
+package kr.re.etri.iotivity.smartwearable;
 
 import android.util.Log;
 import android.widget.TextView;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Observer;
 
 /**
- * Created by mindwing on 2016-01-20.
+ * Observing 할 Resource 데이터와 이 데이터를 화면에 보여줄 컴포넌트를 함께 관리하는 클래스
  */
 public abstract class ObservableData<T> implements
         HealthCareResourceSpec,
@@ -25,6 +25,11 @@ public abstract class ObservableData<T> implements
 
     T data;
 
+    /**
+     * 생성자
+     * @param _view 데이터를 표시할 TextView
+     * @param _observer Observer 객체
+     */
     public ObservableData(TextView _view, Observer _observer) {
         view = _view;
         observer = _observer;
@@ -32,6 +37,11 @@ public abstract class ObservableData<T> implements
         TAG = getClass().getSimpleName();
     }
 
+    /**
+     * 서버로부터 전달받은 데이터를 파싱함
+     * @param ocRepresentation
+     * @throws OcException
+     */
     public abstract void parseData(OcRepresentation ocRepresentation) throws OcException;
 
     @Override
@@ -64,6 +74,10 @@ public abstract class ObservableData<T> implements
 
     }
 
+    /**
+     * 직접 데이터를 설정해서 화면에 표시함
+     * @param _data
+     */
     public void setData(T _data) {
         data = _data;
 

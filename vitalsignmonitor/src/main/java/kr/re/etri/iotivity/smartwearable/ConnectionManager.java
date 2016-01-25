@@ -1,4 +1,4 @@
-package kr.re.etri.iotivity.vitalsignmonitor;
+package kr.re.etri.iotivity.smartwearable;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -12,37 +12,24 @@ import org.iotivity.base.OcPlatform;
 import org.iotivity.base.OcRepresentation;
 import org.iotivity.base.OcResource;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Created by mindwing on 2016-01-24.
+ * Resource 탐색과 Resource 의 데이터에 대한 Get 을 함께 처리할 수 있는 클래스
+ * <br>
  */
 public class ConnectionManager implements
-        Observer,
         HealthCareResourceSpec,
         OcPlatform.OnResourceFoundListener,
         OcResource.OnGetListener {
     private static String TAG = "ConnectionManager";
 
-    private TextView updateDate;
-    Runnable updateDateRunner = new Runnable() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    private Observer observer;
 
-        @Override
-        public void run() {
-            String date = dateFormat.format(new Date());
-            updateDate.setText(date);
-        }
-    };
     private OcResource foundBloodSpO2Resource;
     private OcResource foundHeartRateResource;
     private OcResource foundBloodPressureResource;
@@ -55,21 +42,37 @@ public class ConnectionManager implements
     private BloodGlucoseObservableData bloodGlucoseData;
     private ResourceName lastConnectedResource;
 
-    void setup(TextView _updateDate, TextView _spo2View, TextView _heartRateView, TextView _bloodPressureView,
-               TextView _bodyTemperatureView, TextView _bloodGlucoseView) {
-        updateDate = _updateDate;
+    /**
+     * ConnectionManager 를 사용하기 위해 가장 처음 호출해야 하는 메서드
+     * <br>
+     *
+     * @param _observer            데이터가 갱신되는 순간을 콜백받을 수 있는 Observer
+     * @param _spo2View            혈중 산소포화도를 위한 TextView
+     * @param _heartRateView       심박주기를 위한 TextView
+     * @param _bloodPressureView   혈압을 위한 TextView
+     * @param _bodyTemperatureView 체온을 위한 TextView
+     * @param _bloodGlucoseView    혈당을 위한 TextView
+     */
+    public void setup(Observer _observer, TextView _spo2View, TextView _heartRateView, TextView _bloodPressureView,
+                      TextView _bodyTemperatureView, TextView _bloodGlucoseView) {
+        observer = _observer;
 
-        bloodSpO2Data = new BloodSpO2ObservableData(_spo2View, this);
-        heartRateObservableData = new HeartRateObservableData(_heartRateView, this);
-        bloodPressureObservableData = new BloodPressureObservableData(_bloodPressureView, this);
-        bodyTemperatureObservableData = new BodyTemperatureObservableData(_bodyTemperatureView, this);
-        bloodGlucoseData = new BloodGlucoseObservableData(_bloodGlucoseView, this);
+        bloodSpO2Data = new BloodSpO2ObservableData(_spo2View, observer);
+        heartRateObservableData = new HeartRateObservableData(_heartRateView, observer);
+        bloodPressureObservableData = new BloodPressureObservableData(_bloodPressureView, observer);
+        bodyTemperatureObservableData = new BodyTemperatureObservableData(_bodyTemperatureView, observer);
+        bloodGlucoseData = new BloodGlucoseObservableData(_bloodGlucoseView, observer);
     }
 
-    void connectToServer(ResourceName resource) {
-        Util.toast("trying to connect to server...");
+    /**
+     * Server 의 특정 Resource 에 연결
+     *
+     * @param resource
+     */
+    public void connectToServer(ResourceName resource) {
+//        Util.toast("trying to connect to server...");
 
-        disconnectFromServer(lastConnectedResource);
+//        disconnectFromServer(lastConnectedResource);
 
         // 중복처리
         // lastConnectedResource = null;
@@ -118,13 +121,16 @@ public class ConnectionManager implements
 
             }
         } catch (OcException e) {
-            Util.toast(e.getMessage());
+//            Util.toast(e.getMessage());
             Log.e(TAG, e.toString());
         }
     }
 
-    // stop observation
-    void disconnectFromServer(ResourceName resource) {
+    /**
+     * 서버상의 특정 Resource 에 대한 연결을 해제
+     * @param resource
+     */
+    public void disconnectFromServer(ResourceName resource) {
         if (resource == null) {
             return;
         }
@@ -157,7 +163,7 @@ public class ConnectionManager implements
 
             }
         } catch (OcException e) {
-            Util.toast(e.getMessage());
+//            Util.toast(e.getMessage());
             Log.e(TAG, e.toString());
         }
     }
@@ -165,7 +171,7 @@ public class ConnectionManager implements
     @Override
     public synchronized void onResourceFound(OcResource ocResource) {
         if (null == ocResource) {
-            Util.toast("onResourceFound():ocResource is null");
+//            Util.toast("onResourceFound():ocResource is null");
             Log.e(TAG, "ocResource is null");
 
             return;
@@ -230,7 +236,7 @@ public class ConnectionManager implements
             foundBloodGlucoseResource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-            Util.toast("Error occurred while invoking \"get\" API");
+//            Util.toast("Error occurred while invoking \"get\" API");
         }
     }
 
@@ -243,7 +249,7 @@ public class ConnectionManager implements
             foundBloodPressureResource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-            Util.toast("Error occurred while invoking \"get\" API");
+//            Util.toast("Error occurred while invoking \"get\" API");
         }
     }
 
@@ -256,7 +262,7 @@ public class ConnectionManager implements
             foundBloodSpO2Resource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-            Util.toast("Error occurred while invoking \"get\" API");
+//            Util.toast("Error occurred while invoking \"get\" API");
         }
     }
 
@@ -269,7 +275,7 @@ public class ConnectionManager implements
             foundBodyTemperatureResource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-            Util.toast("Error occurred while invoking \"get\" API");
+//            Util.toast("Error occurred while invoking \"get\" API");
         }
     }
 
@@ -282,7 +288,7 @@ public class ConnectionManager implements
             foundHeartRateResource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-            Util.toast("Error occurred while invoking \"get\" API");
+//            Util.toast("Error occurred while invoking \"get\" API");
         }
     }
 
@@ -347,17 +353,12 @@ public class ConnectionManager implements
             e.printStackTrace();
         }
 
-        update(null, null);
+        observer.update(null, null);
     }
 
     @Override
     public synchronized void onGetFailed(Throwable throwable) {
-        Util.toast(throwable.getMessage());
+//        Util.toast(throwable.getMessage());
         Log.e(TAG, throwable.getMessage(), throwable);
-    }
-
-    @Override
-    public void update(Observable observable, Object data) {
-        updateDate.post(updateDateRunner);
     }
 }
