@@ -21,8 +21,8 @@ public class HeartRateObservableData extends ObservableData {
     @Override
     public void parseData(OcRepresentation ocRepresentation) throws OcException {
         try {
-            if (ocRepresentation.hasAttribute(KEY_BLOOD_GLUCOSE))
-                data = ocRepresentation.getValue(KEY_BLOOD_GLUCOSE);
+            if (ocRepresentation.hasAttribute(KEY_HEART_RATE))
+                data = ocRepresentation.getValue(KEY_HEART_RATE);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to get representation values");

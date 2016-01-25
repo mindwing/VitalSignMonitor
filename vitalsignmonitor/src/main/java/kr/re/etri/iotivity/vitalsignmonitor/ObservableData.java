@@ -60,6 +60,12 @@ public abstract class ObservableData<T> implements
 
     }
 
+    public void setData(T _data) {
+        data = _data;
+
+        view.setText(_data.toString());
+    }
+
     @Override
     public void run() {
         view.setText(data.toString());

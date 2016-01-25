@@ -26,11 +26,11 @@ public class ConnectionManager implements
         OcResource.OnGetListener {
     private static String TAG = "ConnectionManager";
 
-    private TextView spo2View;
-    private TextView heartRateView;
-    private TextView bloodPressureView;
-    private TextView bodyTemperatureView;
-    private TextView bloodGlucoseView;
+//    private TextView spo2View;
+//    private TextView heartRateView;
+//    private TextView bloodPressureView;
+//    private TextView bodyTemperatureView;
+//    private TextView bloodGlucoseView;
 
     private OcResource foundBloodSpO2Resource;
     private OcResource foundHeartRateResource;
@@ -38,19 +38,27 @@ public class ConnectionManager implements
     private OcResource foundBodyTemperatureResource;
     private OcResource foundBloodGlucoseResource;
 
+    private BloodSpO2ObservableData bloodSpO2Data;
+    private HeartRateObservableData heartRateObservableData;
+    private BloodPressureObservableData bloodPressureObservableData;
+    private BodyTemperatureObservableData bodyTemperatureObservableData;
     private BloodGlucoseObservableData bloodGlucoseData;
 
     private ResourceName lastConnectedResource;
 
     void setup(TextView _spo2View, TextView _heartRateView, TextView _bloodPressureView,
                TextView _bodyTemperatureView, TextView _bloodGlucoseView) {
-        spo2View = _spo2View;
-        heartRateView = _heartRateView;
-        bloodPressureView = _bloodPressureView;
-        bodyTemperatureView = _bodyTemperatureView;
-        bloodGlucoseView = _bloodGlucoseView;
+//        spo2View = _spo2View;
+//        heartRateView = _heartRateView;
+//        bloodPressureView = _bloodPressureView;
+//        bodyTemperatureView = _bodyTemperatureView;
+//        bloodGlucoseView = _bloodGlucoseView;
 
-        bloodGlucoseData = new BloodGlucoseObservableData(bloodGlucoseView);
+        bloodSpO2Data = new BloodSpO2ObservableData(_spo2View);
+        heartRateObservableData = new HeartRateObservableData(_heartRateView);
+        bloodPressureObservableData = new BloodPressureObservableData(_bloodPressureView);
+        bodyTemperatureObservableData = new BodyTemperatureObservableData(_bodyTemperatureView);
+        bloodGlucoseData = new BloodGlucoseObservableData(_bloodGlucoseView);
     }
 
     void connectToServer(ResourceName resource) {
@@ -160,7 +168,7 @@ public class ConnectionManager implements
 
         // Get the resource URI
         String resourceUri = ocResource.getUri();
-        Util.toast("onResourceFound(): resourceUri: " + resourceUri);
+//        Util.toast("onResourceFound(): resourceUri: " + resourceUri);
         // Get the resource host address
 //        String hostAddress = ocResource.getHost();
 //        toast("onResourceFound(): hostAddress: " + hostAddress);
@@ -209,7 +217,7 @@ public class ConnectionManager implements
     }
 
     private void getBloodGlucoseResourceRepresentation() {
-        Util.toast("Getting Blood Glucose Representation...");
+//        Util.toast("Getting Blood Glucose Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -222,7 +230,7 @@ public class ConnectionManager implements
     }
 
     private void getBloodPressureResourceRepresentation() {
-        Util.toast("Getting Blood Pressure Representation...");
+//        Util.toast("Getting Blood Pressure Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -235,7 +243,7 @@ public class ConnectionManager implements
     }
 
     private void getBloodSpO2ResourceRepresentation() {
-        Util.toast("Getting Blood SpO2 Representation...");
+//        Util.toast("Getting Blood SpO2 Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -248,7 +256,7 @@ public class ConnectionManager implements
     }
 
     private void getBodyTemperatureResourceRepresentation() {
-        Util.toast("Getting Body Temperature Representation...");
+//        Util.toast("Getting Body Temperature Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -261,7 +269,7 @@ public class ConnectionManager implements
     }
 
     private void getHeartBeatResourceRepresentation() {
-        Util.toast("Getting HeartBeat Representation...");
+//        Util.toast("Getting HeartBeat Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -284,23 +292,44 @@ public class ConnectionManager implements
                 try {
                     switch (resourceUri) {
                         case URI_BLOOD_SPO2:
-                            spo2View.setText(ocRepresentation.getValue(KEY_BLOOD_SPO2).toString());
+                            bloodSpO2Data.setData(ocRepresentation.getValue(KEY_BLOOD_SPO2));
+
+                            foundBloodSpO2Resource.observe(
+                                    ObserveType.OBSERVE,
+                                    new HashMap<String, String>(),
+                                    bloodSpO2Data);
                             break;
 
                         case URI_HEART_RATE:
-                            heartRateView.setText(ocRepresentation.getValue(KEY_HEART_RATE).toString());
+                            heartRateObservableData.setData(ocRepresentation.getValue(KEY_HEART_RATE));
+
+                            foundHeartRateResource.observe(
+                                    ObserveType.OBSERVE,
+                                    new HashMap<String, String>(),
+                                    heartRateObservableData);
                             break;
 
                         case URI_BLOOD_PRESSURE:
-                            bloodPressureView.setText(ocRepresentation.getValue(KEY_BLOOD_PRESSURE).toString());
+                            bloodPressureObservableData.setData(ocRepresentation.getValue(KEY_BLOOD_PRESSURE));
+
+                            foundBloodPressureResource.observe(
+                                    ObserveType.OBSERVE,
+                                    new HashMap<String, String>(),
+                                    bloodPressureObservableData);
                             break;
 
                         case URI_BODY_TEMPERATURE:
-                            bodyTemperatureView.setText(ocRepresentation.getValue(KEY_BODY_TEMPERATURE).toString());
+                            bodyTemperatureObservableData.setData(ocRepresentation.getValue(KEY_BODY_TEMPERATURE));
+                            SystemClock.sleep(1);
+
+                            foundBodyTemperatureResource.observe(
+                                    ObserveType.OBSERVE,
+                                    new HashMap<String, String>(),
+                                    bodyTemperatureObservableData);
                             break;
 
                         case URI_BLOOD_GLUCOSE:
-                            bloodGlucoseView.setText(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE).toString());
+                            bloodGlucoseData.setData(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE));
                             SystemClock.sleep(1);
 
                             foundBloodGlucoseResource.observe(

@@ -36,7 +36,6 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
     private final static int SUCCESS = 200;
     //    private boolean mIsSlowResponse = false;
     boolean isListOfObservers = false;
-    Thread observerNotifier;
 
     public HealthCareResource() {
         TAG = getClass().getSimpleName();
@@ -158,31 +157,32 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
 //        sendResponse(response);
 //    }
 
-    private List<Byte> mObservationIds; //IDs of observes
+//    private Byte mObservationId;
+    private Thread notifyThread;
 
-    private EntityHandlerResult handleObserver(final OcResourceRequest request) {
+    private synchronized EntityHandlerResult handleObserver(final OcResourceRequest request) {
         ObservationInfo observationInfo = request.getObservationInfo();
         switch (observationInfo.getObserveAction()) {
             case REGISTER:
-                if (null == mObservationIds) {
-                    mObservationIds = new LinkedList<>();
+//                mObservationId = observationInfo.getOcObservationId();
+
+                if (notifyThread != null) {
+//                    notifyThread.interrupt();
+                    break;
                 }
-                mObservationIds.add(observationInfo.getOcObservationId());
+
+                (notifyThread = new Thread() {
+                    public void run() {
+                        notifyObservers(request);
+                    }
+                }).start();
                 break;
+
             case UNREGISTER:
-                mObservationIds.remove((Byte) observationInfo.getOcObservationId());
+//                mObservationId = 0;
                 break;
         }
-        // Observation happens on a different thread in notifyObservers method.
-        // If we have not created the thread already, we will create one here.
-        if (null == observerNotifier) {
-            observerNotifier = new Thread(new Runnable() {
-                public void run() {
-                    notifyObservers(request);
-                }
-            });
-            observerNotifier.start();
-        }
+
         return EntityHandlerResult.OK;
     }
 
@@ -213,7 +213,6 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
                 if (ErrorCode.NO_OBSERVERS == errorCode) {
                     Log.d(TAG, "No more observers, stopping notifications");
                 }
-                return;
             }
         }
     }

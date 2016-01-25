@@ -28,27 +28,37 @@ public class Util {
         }
 
         @Override
-        public void onActivityPaused(Activity activity) {
+        public void onActivityPaused(Activity _activity) {
+            activity = null;
         }
 
         @Override
-        public void onActivityStopped(Activity activity) {
+        public void onActivityStopped(Activity _activity) {
+            activity = null;
         }
 
         @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+        public void onActivitySaveInstanceState(Activity _activity, Bundle outState) {
+            activity = null;
         }
 
         @Override
-        public void onActivityDestroyed(Activity activity) {
+        public void onActivityDestroyed(Activity _activity) {
+            activity = null;
         }
     };
 
     static void toast(final String msg) {
-        activity.runOnUiThread(new Runnable() {
+        final Activity act = activity;
+
+        if (act == null) {
+            return;
+        }
+
+        act.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(act, msg, Toast.LENGTH_SHORT);
                 toast.show();
             }
         });
