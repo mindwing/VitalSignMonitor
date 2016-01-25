@@ -7,12 +7,15 @@ import org.iotivity.base.OcRepresentation;
 
 /**
  * Created by mindwing on 2016-01-20.
+ *
+ * Property name: bloodPressure
+ * Value type: string
  */
 public class BloodPressureResource extends HealthCareResource {
 
     private int systolicPressure = 120;
     private int diastolicPressure = 80;
-    private String bloodPressure = "120/80";
+    private String bloodPressure = "120, 80";
 
     public BloodPressureResource(String _name) {
         name = _name;

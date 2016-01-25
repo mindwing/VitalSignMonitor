@@ -7,6 +7,9 @@ import org.iotivity.base.OcRepresentation;
 
 /**
  * Created by mindwing on 2016-01-20.
+ *
+ * Property name: temperature
+ * Value type: number
  */
 public class BodyTemperatureResource extends HealthCareResource {
 
@@ -17,6 +20,13 @@ public class BodyTemperatureResource extends HealthCareResource {
 
         resourceUri = URI_BODY_TEMPERATURE;
         resourceType = RESOURCE_TYPE_BODY_TEMPERATURE;
+    }
+
+    private int diff = 1;
+
+    public void changeValue() {
+        diff *= -1;
+        bodyTemperature += diff;
     }
 
     @Override

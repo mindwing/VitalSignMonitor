@@ -8,18 +8,21 @@ import org.iotivity.base.OcRepresentation;
 
 /**
  * Created by mindwing on 2016-01-20.
+ *
+ * Property name: temperature
+ * Value type: number
  */
-public class BloodGlucoseData extends ObservableData {
+public class BodyTemperatureObservableData extends ObservableData {
 
-    public BloodGlucoseData(TextView _view) {
+    public BodyTemperatureObservableData(TextView _view) {
         super(_view);
     }
 
     @Override
     public void parseData(OcRepresentation ocRepresentation) throws OcException {
         try {
-            if (ocRepresentation.hasAttribute(VitalSignResource.KEY_BLOOD_GLUCOSE))
-                data = ocRepresentation.getValue(VitalSignResource.KEY_BLOOD_GLUCOSE);
+            if (ocRepresentation.hasAttribute(KEY_BLOOD_GLUCOSE))
+                data = ocRepresentation.getValue(KEY_BLOOD_GLUCOSE);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to get representation values");

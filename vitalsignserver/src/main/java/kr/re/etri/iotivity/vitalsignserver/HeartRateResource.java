@@ -7,6 +7,9 @@ import org.iotivity.base.OcRepresentation;
 
 /**
  * Created by mindwing on 2016-01-20.
+ *
+ * Property name: heartRate
+ * Value type: number
  */
 public class HeartRateResource extends HealthCareResource {
 
@@ -17,6 +20,13 @@ public class HeartRateResource extends HealthCareResource {
 
         resourceUri = URI_HEART_RATE;
         resourceType = RESOURCE_TYPE_HEART_RATE;
+    }
+
+    private int diff = 1;
+
+    public void changeValue() {
+        diff *= -1;
+        heartRate += diff;
     }
 
     @Override

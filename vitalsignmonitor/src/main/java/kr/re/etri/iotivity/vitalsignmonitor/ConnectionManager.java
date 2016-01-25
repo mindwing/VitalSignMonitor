@@ -17,26 +17,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_BLOOD_GLUCOSE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_BLOOD_PRESSURE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_BLOOD_SPO2;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_BODY_TEMPERATURE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.KEY_HEART_RATE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_BLOOD_GLUCOSE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_BLOOD_PRESSURE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_BLOOD_SPO2;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_BODY_TEMPERATURE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.QUERY_HEART_RATE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_BLOOD_GLUCOSE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_BLOOD_PRESSURE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_BLOOD_SPO2;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_BODY_TEMPERATURE;
-import static kr.re.etri.iotivity.vitalsignmonitor.VitalSignResource.URI_HEART_RATE;
-
 /**
  * Created by mindwing on 2016-01-24.
  */
 public class ConnectionManager implements
+        HealthCareResourceSpec,
         OcPlatform.OnResourceFoundListener,
         OcResource.OnGetListener {
     private static String TAG = "ConnectionManager";
@@ -52,7 +37,9 @@ public class ConnectionManager implements
     private OcResource foundBloodPressureResource;
     private OcResource foundBodyTemperatureResource;
     private OcResource foundBloodGlucoseResource;
-    private BloodGlucoseData bloodGlucoseData;
+
+    private BloodGlucoseObservableData bloodGlucoseData;
+
     private ResourceName lastConnectedResource;
 
     void setup(TextView _spo2View, TextView _heartRateView, TextView _bloodPressureView,
@@ -63,14 +50,16 @@ public class ConnectionManager implements
         bodyTemperatureView = _bodyTemperatureView;
         bloodGlucoseView = _bloodGlucoseView;
 
-        bloodGlucoseData = new BloodGlucoseData(bloodGlucoseView);
+        bloodGlucoseData = new BloodGlucoseObservableData(bloodGlucoseView);
     }
 
     void connectToServer(ResourceName resource) {
         Util.toast("trying to connect to server...");
 
         disconnectFromServer(lastConnectedResource);
-        lastConnectedResource = null;
+
+        // 중복처리
+        // lastConnectedResource = null;
 
         try {
             switch (resource) {
@@ -127,18 +116,26 @@ public class ConnectionManager implements
             return;
         }
 
+        if (lastConnectedResource == resource) {
+            lastConnectedResource = null;
+        }
+
         try {
             switch (resource) {
                 case SPO2:
+                    foundBloodSpO2Resource.cancelObserve();
                     break;
 
                 case HEART_RATE:
+                    foundHeartRateResource.cancelObserve();
                     break;
 
                 case BLOOD_PRESSURE:
+                    foundBloodPressureResource.cancelObserve();
                     break;
 
                 case BODY_TEMPERATURE:
+                    foundBodyTemperatureResource.cancelObserve();
                     break;
 
                 case BLOOD_GLUCOSE:
@@ -286,6 +283,22 @@ public class ConnectionManager implements
 
                 try {
                     switch (resourceUri) {
+                        case URI_BLOOD_SPO2:
+                            spo2View.setText(ocRepresentation.getValue(KEY_BLOOD_SPO2).toString());
+                            break;
+
+                        case URI_HEART_RATE:
+                            heartRateView.setText(ocRepresentation.getValue(KEY_HEART_RATE).toString());
+                            break;
+
+                        case URI_BLOOD_PRESSURE:
+                            bloodPressureView.setText(ocRepresentation.getValue(KEY_BLOOD_PRESSURE).toString());
+                            break;
+
+                        case URI_BODY_TEMPERATURE:
+                            bodyTemperatureView.setText(ocRepresentation.getValue(KEY_BODY_TEMPERATURE).toString());
+                            break;
+
                         case URI_BLOOD_GLUCOSE:
                             bloodGlucoseView.setText(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE).toString());
                             SystemClock.sleep(1);
@@ -294,22 +307,6 @@ public class ConnectionManager implements
                                     ObserveType.OBSERVE,
                                     new HashMap<String, String>(),
                                     bloodGlucoseData);
-                            break;
-
-                        case URI_BLOOD_PRESSURE:
-                            bloodPressureView.setText(ocRepresentation.getValue(KEY_BLOOD_PRESSURE).toString());
-                            break;
-
-                        case URI_BLOOD_SPO2:
-                            spo2View.setText(ocRepresentation.getValue(KEY_BLOOD_SPO2).toString());
-                            break;
-
-                        case URI_BODY_TEMPERATURE:
-                            bodyTemperatureView.setText(ocRepresentation.getValue(KEY_BODY_TEMPERATURE).toString());
-                            break;
-
-                        case URI_HEART_RATE:
-                            heartRateView.setText(ocRepresentation.getValue(KEY_HEART_RATE).toString());
                             break;
 
                         default:

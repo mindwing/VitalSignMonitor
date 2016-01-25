@@ -1,10 +1,7 @@
 package kr.re.etri.iotivity.vitalsignmonitor;
 
-import android.app.Activity;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.iotivity.base.OcException;
 import org.iotivity.base.OcHeaderOption;
@@ -16,12 +13,15 @@ import java.util.List;
 /**
  * Created by mindwing on 2016-01-20.
  */
-public abstract class ObservableData implements OcResource.OnObserveListener, Runnable {
+public abstract class ObservableData<T> implements
+        HealthCareResourceSpec,
+        OcResource.OnObserveListener,
+        Runnable {
     String TAG;
 
     TextView view;
 
-    int data;
+    T data;
 
     public ObservableData(TextView _view) {
         view = _view;
@@ -62,7 +62,6 @@ public abstract class ObservableData implements OcResource.OnObserveListener, Ru
 
     @Override
     public void run() {
-        view.setText(Integer.toString(data));
-//        view.invalidate();
+        view.setText(data.toString());
     }
 }

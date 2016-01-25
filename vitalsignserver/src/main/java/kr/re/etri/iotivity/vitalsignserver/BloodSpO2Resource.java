@@ -7,6 +7,9 @@ import org.iotivity.base.OcRepresentation;
 
 /**
  * Created by mindwing on 2016-01-20.
+ *
+ * Property name: spo2
+ * Value type: number
  */
 public class BloodSpO2Resource extends HealthCareResource {
 
@@ -17,6 +20,13 @@ public class BloodSpO2Resource extends HealthCareResource {
 
         resourceUri = URI_BLOOD_SPO2;
         resourceType = RESOURCE_TYPE_BLOOD_SPO2;
+    }
+
+    private int diff = 1;
+
+    public void changeValue() {
+        diff *= -1;
+        spO2 += diff;
     }
 
     @Override

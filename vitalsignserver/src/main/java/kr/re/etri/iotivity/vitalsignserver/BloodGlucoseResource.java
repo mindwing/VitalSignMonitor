@@ -7,10 +7,13 @@ import org.iotivity.base.OcRepresentation;
 
 /**
  * Created by mindwing on 2016-01-20.
+ *
+ * Property name: bloodsugar
+ * Value type: number
  */
 public class BloodGlucoseResource extends HealthCareResource {
 
-    private int glucose = 10;
+    private int glucose = 80;
 
     public BloodGlucoseResource(String _name) {
         name = _name;
@@ -19,8 +22,11 @@ public class BloodGlucoseResource extends HealthCareResource {
         resourceType = RESOURCE_TYPE_BLOOD_GLUCOSE;
     }
 
-    public void increase() {
-        ++glucose;
+    private int diff = 1;
+
+    public void changeValue() {
+        diff *= -1;
+        glucose += diff;
     }
 
     @Override
