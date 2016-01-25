@@ -12,7 +12,7 @@ import org.iotivity.base.OcRepresentation;
  * Property name: heartRate
  * Value type: number
  */
-public class HeartRateObservableData extends ObservableData {
+public class HeartRateObservableData<Integer> extends ObservableData {
 
     public HeartRateObservableData(TextView _view) {
         super(_view);

@@ -12,7 +12,7 @@ import org.iotivity.base.OcRepresentation;
  * Property name: bloodPressure
  * Value type: string
  */
-public class BloodPressureObservableData extends ObservableData {
+public class BloodPressureObservableData<String> extends ObservableData {
 
     public BloodPressureObservableData(TextView _view) {
         super(_view);

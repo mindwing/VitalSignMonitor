@@ -12,7 +12,7 @@ import org.iotivity.base.OcRepresentation;
  * Property name: temperature
  * Value type: number
  */
-public class BodyTemperatureObservableData extends ObservableData {
+public class BodyTemperatureObservableData<Integer> extends ObservableData {
 
     public BodyTemperatureObservableData(TextView _view) {
         super(_view);

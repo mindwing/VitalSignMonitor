@@ -12,7 +12,7 @@ import org.iotivity.base.OcRepresentation;
  * Property name: bloodsugar
  * Value type: number
  */
-public class BloodGlucoseObservableData extends ObservableData {
+public class BloodGlucoseObservableData<Integer> extends ObservableData {
 
     public BloodGlucoseObservableData(TextView _view) {
         super(_view);

@@ -12,7 +12,7 @@ import org.iotivity.base.OcRepresentation;
  * Property name: spo2
  * Value type: number
  */
-public class BloodSpO2ObservableData extends ObservableData {
+public class BloodSpO2ObservableData<Integer> extends ObservableData {
 
     public BloodSpO2ObservableData(TextView _view) {
         super(_view);
