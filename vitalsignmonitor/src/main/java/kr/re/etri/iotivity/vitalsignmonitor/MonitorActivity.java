@@ -23,6 +23,9 @@ import java.util.Observer;
 import kr.re.etri.iotivity.smartwearable.ConnectionManager;
 import kr.re.etri.iotivity.smartwearable.ResourceName;
 
+/**
+ * Vital Sign 을 모니터링하는 액티비티
+ */
 public class MonitorActivity extends Activity {
 
     private static final String TAG = MonitorActivity.class.getSimpleName();
@@ -37,6 +40,9 @@ public class MonitorActivity extends Activity {
     private TextView[] bodyTemperatureView = new TextView[4];
     private TextView[] bloodGlucoseView = new TextView[4];
 
+    /**
+     * 필드들의 갱신시각을 화면에 표시
+     */
     private class UpdateDateRunner implements Runnable, Observer {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
@@ -111,6 +117,10 @@ public class MonitorActivity extends Activity {
         OcPlatform.Configure(platformConfig);
     }
 
+    /**
+     * server 에 연결하고자 버튼을 터치하면 호출되는 메서드
+     * @param view
+     */
     public void toggleConnection(View view) {
         String tag = view.getTag().toString();
         ResourceName resourceName = ResourceName.valueOf(tag);
