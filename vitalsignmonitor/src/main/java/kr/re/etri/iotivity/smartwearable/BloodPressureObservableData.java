@@ -16,8 +16,8 @@ import java.util.Observer;
  */
 public class BloodPressureObservableData<String> extends ObservableData {
 
-    public BloodPressureObservableData(TextView _view, Observer _observer) {
-        super(_view, _observer);
+    public BloodPressureObservableData(TextView[] _views, Observer _observer) {
+        super(_views, _observer);
     }
 
     @Override

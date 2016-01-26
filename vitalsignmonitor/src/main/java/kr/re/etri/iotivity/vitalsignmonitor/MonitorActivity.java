@@ -70,7 +70,7 @@ public class MonitorActivity extends Activity {
         setContentView(R.layout.activity_monitor);
 
         setupView();
-        connManager.setup(updateDateRunner, spo2View[0], heartRateView[0], bloodPressureView[0], bodyTemperatureView[0], bloodGlucoseView[0]);
+        connManager.setup(updateDateRunner, spo2View, heartRateView, bloodPressureView, bodyTemperatureView, bloodGlucoseView);
 
         prepareConfiguration();
     }

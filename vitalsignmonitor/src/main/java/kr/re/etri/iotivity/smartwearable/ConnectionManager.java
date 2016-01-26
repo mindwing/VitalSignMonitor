@@ -53,8 +53,8 @@ public class ConnectionManager implements
      * @param _bodyTemperatureView 체온을 위한 TextView
      * @param _bloodGlucoseView    혈당을 위한 TextView
      */
-    public void setup(Observer _observer, TextView _spo2View, TextView _heartRateView, TextView _bloodPressureView,
-                      TextView _bodyTemperatureView, TextView _bloodGlucoseView) {
+    public void setup(Observer _observer, TextView[] _spo2View, TextView[] _heartRateView, TextView[] _bloodPressureView,
+                      TextView[] _bodyTemperatureView, TextView[] _bloodGlucoseView) {
         observer = _observer;
 
         bloodSpO2Data = new BloodSpO2ObservableData(_spo2View, observer);

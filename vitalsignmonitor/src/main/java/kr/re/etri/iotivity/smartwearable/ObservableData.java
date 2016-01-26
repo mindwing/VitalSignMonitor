@@ -21,17 +21,17 @@ public abstract class ObservableData<T> implements
     String TAG;
 
     Observer observer;
-    TextView view;
+    TextView[] views;
 
     T data;
 
     /**
      * 생성자
-     * @param _view 데이터를 표시할 TextView
+     * @param _views 데이터를 표시할 TextView 배열
      * @param _observer Observer 객체
      */
-    public ObservableData(TextView _view, Observer _observer) {
-        view = _view;
+    public ObservableData(TextView[] _views, Observer _observer) {
+        views = _views;
         observer = _observer;
 
         TAG = getClass().getSimpleName();
@@ -60,7 +60,7 @@ public abstract class ObservableData<T> implements
             parseData(ocRepresentation);
 
             Log.w(TAG, "parseData() - " + data);
-            view.post(this);
+            views[0].post(this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
             Log.d(TAG, "Failed to get the attribute values");
@@ -81,7 +81,7 @@ public abstract class ObservableData<T> implements
     public void setData(T _data) {
         data = _data;
 
-        view.post(this);
+        views[0].post(this);
     }
 
     void notifyObserver() {
@@ -90,6 +90,9 @@ public abstract class ObservableData<T> implements
 
     @Override
     public void run() {
-        view.setText(data.toString());
+        views[3].setText(views[2].getText());
+        views[2].setText(views[1].getText());
+        views[1].setText(views[0].getText());
+        views[0].setText(data.toString());
     }
 }

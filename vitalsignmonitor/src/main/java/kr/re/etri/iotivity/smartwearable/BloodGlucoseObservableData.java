@@ -16,8 +16,8 @@ import java.util.Observer;
  */
 public class BloodGlucoseObservableData<Integer> extends ObservableData {
 
-    public BloodGlucoseObservableData(TextView _view, Observer _observer) {
-        super(_view, _observer);
+    public BloodGlucoseObservableData(TextView[] _views, Observer _observer) {
+        super(_views, _observer);
     }
 
     @Override

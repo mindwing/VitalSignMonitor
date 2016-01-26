@@ -16,8 +16,8 @@ import java.util.Observer;
  */
 public class HeartRateObservableData<Integer> extends ObservableData {
 
-    public HeartRateObservableData(TextView _view, Observer _observer) {
-        super(_view, _observer);
+    public HeartRateObservableData(TextView[] _views, Observer _observer) {
+        super(_views, _observer);
     }
 
     @Override

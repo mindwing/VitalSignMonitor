@@ -16,8 +16,8 @@ import java.util.Observer;
  */
 public class BodyTemperatureObservableData<Integer> extends ObservableData {
 
-    public BodyTemperatureObservableData(TextView _view, Observer _observer) {
-        super(_view, _observer);
+    public BodyTemperatureObservableData(TextView[] _views, Observer _observer) {
+        super(_views, _observer);
     }
 
     @Override
