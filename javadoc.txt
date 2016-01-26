@@ -1,0 +1,5 @@
+[profile]
+javadoc -protected -splitindex -encoding UTF-8 -docencoding UTF-8 kr.re.etri.iotivity.smartwearable -sourcepath "C:/Users/mindwing/#dev/StudioProjects/VitalSignMonitor/vitalsignserver/src/main/java" -classpath C:\Users\mindwing\#dev\StudioProjects\VitalSignMonitor\vitalsignserver\build\intermediates\exploded-aar\iotivity-base-x86-debug\jars\classes.jar;C:\Users\mindwing\#dev\StudioProjects\VitalSignMonitor\vitalsignserver\build\intermediates\exploded-aar\iotivity-base-x86-debug\res -d C:\Users\mindwing\#dev\javadoc
+
+[monitor]
+javadoc -protected -splitindex -encoding UTF-8 -docencoding UTF-8 kr.re.etri.iotivity.vitalsignmonitor -sourcepath "C:/Users/mindwing/#dev/StudioProjects/VitalSignMonitor/vitalsignmonitor/src/main/java" -classpath C:\Users\mindwing\#dev\StudioProjects\VitalSignMonitor\vitalsignserver\build\intermediates\exploded-aar\iotivity-base-x86-debug\jars\classes.jar;C:\Users\mindwing\#dev\StudioProjects\VitalSignMonitor\vitalsignserver\build\intermediates\exploded-aar\iotivity-base-x86-debug\res -d C:\Users\mindwing\#dev\javadoc

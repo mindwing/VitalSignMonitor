@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 /**
- * Created by mindwing on 2016-01-24.
+ * 편의메서드를 담는 클래스
  */
 public class Util {
     private static Activity activity;
