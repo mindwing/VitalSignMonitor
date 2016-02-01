@@ -3,6 +3,7 @@ package kr.re.etri.iotivity.vitalsignmonitor;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -26,7 +27,7 @@ import kr.re.etri.iotivity.smartwearable.ResourceName;
 /**
  * Vital Sign 을 모니터링하는 액티비티
  */
-public class MonitorActivity extends Activity {
+public class MonitorActivity extends AppCompatActivity {
 
     private static final String TAG = MonitorActivity.class.getSimpleName();
 
@@ -119,7 +120,7 @@ public class MonitorActivity extends Activity {
 
     /**
      * server 에 연결하고자 버튼을 터치하면 호출되는 메서드
-     * @param view
+     * @param view 터치한 View
      */
     public void toggleConnection(View view) {
         String tag = view.getTag().toString();
