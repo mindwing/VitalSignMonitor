@@ -90,6 +90,12 @@
                 android:textAllCaps="false"
                 android:textOff="혈당"
                 android:textOn="[ 혈당 ]" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:text=""
+                android:textAllCaps="false" />
         </LinearLayout>
 
         <LinearLayout
@@ -142,6 +148,14 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:text="최근값"
+                android:textAllCaps="false" />
         </LinearLayout>
 
         <LinearLayout
@@ -192,6 +206,14 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:text="이전값-1"
+                android:textAllCaps="false" />
         </LinearLayout>
 
         <LinearLayout
@@ -242,6 +264,14 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:text="이전값-2"
+                android:textAllCaps="false" />
         </LinearLayout>
 
 
@@ -293,7 +323,28 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:text="이전값-3"
+                android:textAllCaps="false" />
         </LinearLayout>
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/vitalPane"
+        android:layout_marginTop="30dp"
+        android:background="#afafaf">
+
+        <TextView
+            android:id="@+id/log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
 </RelativeLayout>

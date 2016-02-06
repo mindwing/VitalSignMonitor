@@ -128,6 +128,7 @@ public class ConnectionManager implements
 
     /**
      * 서버상의 특정 Resource 에 대한 연결을 해제
+     *
      * @param resource
      */
     public void disconnectFromServer(ResourceName resource) {
@@ -142,23 +143,33 @@ public class ConnectionManager implements
         try {
             switch (resource) {
                 case SPO2:
-                    foundBloodSpO2Resource.cancelObserve();
+                    if (foundBloodSpO2Resource != null) {
+                        foundBloodSpO2Resource.cancelObserve();
+                    }
                     break;
 
                 case HEART_RATE:
-                    foundHeartRateResource.cancelObserve();
+                    if (foundHeartRateResource != null) {
+                        foundHeartRateResource.cancelObserve();
+                    }
                     break;
 
                 case BLOOD_PRESSURE:
-                    foundBloodPressureResource.cancelObserve();
+                    if (foundBloodPressureResource != null) {
+                        foundBloodPressureResource.cancelObserve();
+                    }
                     break;
 
                 case BODY_TEMPERATURE:
-                    foundBodyTemperatureResource.cancelObserve();
+                    if (foundBodyTemperatureResource != null) {
+                        foundBodyTemperatureResource.cancelObserve();
+                    }
                     break;
 
                 case BLOOD_GLUCOSE:
-                    foundBloodGlucoseResource.cancelObserve();
+                    if (foundBloodGlucoseResource != null) {
+                        foundBloodGlucoseResource.cancelObserve();
+                    }
                     break;
 
             }

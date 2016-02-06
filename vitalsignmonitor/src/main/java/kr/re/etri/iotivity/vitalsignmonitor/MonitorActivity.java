@@ -1,6 +1,5 @@
 package kr.re.etri.iotivity.vitalsignmonitor;
 
-import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
