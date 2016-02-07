@@ -24,7 +24,8 @@ public class BloodSpO2Resource extends HealthCareResource {
         resourceType = RESOURCE_TYPE_BLOOD_SPO2;
     }
 
-    void changeValue() {
+    @Override
+    public void changeValue() {
         spO2 += getRandomNumber();
     }
 

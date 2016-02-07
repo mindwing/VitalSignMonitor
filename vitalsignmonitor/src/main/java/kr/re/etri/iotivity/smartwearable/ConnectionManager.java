@@ -35,11 +35,11 @@ public class ConnectionManager implements
     private OcResource foundBloodPressureResource;
     private OcResource foundBodyTemperatureResource;
     private OcResource foundBloodGlucoseResource;
-    private BloodSpO2ObservableData bloodSpO2Data;
+    private BloodSpO2ObservableData bloodSpO2ObservableData;
     private HeartRateObservableData heartRateObservableData;
     private BloodPressureObservableData bloodPressureObservableData;
     private BodyTemperatureObservableData bodyTemperatureObservableData;
-    private BloodGlucoseObservableData bloodGlucoseData;
+    private BloodGlucoseObservableData bloodGlucoseObservableData;
     private ResourceName lastConnectedResource;
 
     /**
@@ -57,11 +57,11 @@ public class ConnectionManager implements
                       TextView[] _bodyTemperatureView, TextView[] _bloodGlucoseView) {
         observer = _observer;
 
-        bloodSpO2Data = new BloodSpO2ObservableData(_spo2View, observer);
+        bloodSpO2ObservableData = new BloodSpO2ObservableData(_spo2View, observer);
         heartRateObservableData = new HeartRateObservableData(_heartRateView, observer);
         bloodPressureObservableData = new BloodPressureObservableData(_bloodPressureView, observer);
         bodyTemperatureObservableData = new BodyTemperatureObservableData(_bodyTemperatureView, observer);
-        bloodGlucoseData = new BloodGlucoseObservableData(_bloodGlucoseView, observer);
+        bloodGlucoseObservableData = new BloodGlucoseObservableData(_bloodGlucoseView, observer);
     }
 
     /**
@@ -70,7 +70,7 @@ public class ConnectionManager implements
      * @param resource
      */
     public void connectToServer(ResourceName resource) {
-//        Util.toast("trying to connect to server...");
+        Utils.log("Trying to find Resource: " + resource);
 
 //        disconnectFromServer(lastConnectedResource);
 
@@ -119,9 +119,11 @@ public class ConnectionManager implements
                     );
                     break;
 
+
             }
         } catch (OcException e) {
-//            Util.toast(e.getMessage());
+            Utils.toast(e.getMessage());
+            Utils.log(e.getMessage());
             Log.e(TAG, e.toString());
         }
     }
@@ -139,6 +141,8 @@ public class ConnectionManager implements
         if (lastConnectedResource == resource) {
             lastConnectedResource = null;
         }
+
+        Utils.log("Trying to cancel observing Resource: " + resource);
 
         try {
             switch (resource) {
@@ -173,8 +177,12 @@ public class ConnectionManager implements
                     break;
 
             }
+
+            Utils.log("Canceled observing Resource: " + resource);
+
         } catch (OcException e) {
-//            Util.toast(e.getMessage());
+            Utils.toast(e.getMessage());
+            Utils.log(e.getMessage());
             Log.e(TAG, e.toString());
         }
     }
@@ -182,7 +190,7 @@ public class ConnectionManager implements
     @Override
     public synchronized void onResourceFound(OcResource ocResource) {
         if (null == ocResource) {
-//            Util.toast("onResourceFound():ocResource is null");
+            Utils.log("onResourceFound(): ocResource is null");
             Log.e(TAG, "ocResource is null");
 
             return;
@@ -190,7 +198,7 @@ public class ConnectionManager implements
 
         // Get the resource URI
         String resourceUri = ocResource.getUri();
-//        Util.toast("onResourceFound(): resourceUri: " + resourceUri);
+        Utils.log("onResourceFound(): resourceUri: " + resourceUri);
         // Get the resource host address
 //        String hostAddress = ocResource.getHost();
 //        toast("onResourceFound(): hostAddress: " + hostAddress);
@@ -239,7 +247,7 @@ public class ConnectionManager implements
     }
 
     private void getBloodGlucoseResourceRepresentation() {
-//        Util.toast("Getting Blood Glucose Representation...");
+        Utils.log("Getting Blood Glucose Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -247,12 +255,13 @@ public class ConnectionManager implements
             foundBloodGlucoseResource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-//            Util.toast("Error occurred while invoking \"get\" API");
+            Utils.log("Error occurred while invoking \"get\" API");
+            Utils.toast("Error occurred while invoking \"get\" API");
         }
     }
 
     private void getBloodPressureResourceRepresentation() {
-//        Util.toast("Getting Blood Pressure Representation...");
+        Utils.log("Getting Blood Pressure Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -260,12 +269,13 @@ public class ConnectionManager implements
             foundBloodPressureResource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-//            Util.toast("Error occurred while invoking \"get\" API");
+            Utils.log("Error occurred while invoking \"get\" API");
+            Utils.toast("Error occurred while invoking \"get\" API");
         }
     }
 
     private void getBloodSpO2ResourceRepresentation() {
-//        Util.toast("Getting Blood SpO2 Representation...");
+        Utils.log("Getting Blood SpO2 Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -273,12 +283,13 @@ public class ConnectionManager implements
             foundBloodSpO2Resource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-//            Util.toast("Error occurred while invoking \"get\" API");
+            Utils.log("Error occurred while invoking \"get\" API");
+            Utils.toast("Error occurred while invoking \"get\" API");
         }
     }
 
     private void getBodyTemperatureResourceRepresentation() {
-//        Util.toast("Getting Body Temperature Representation...");
+        Utils.log("Getting Body Temperature Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -286,12 +297,13 @@ public class ConnectionManager implements
             foundBodyTemperatureResource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-//            Util.toast("Error occurred while invoking \"get\" API");
+            Utils.log("Error occurred while invoking \"get\" API");
+            Utils.toast("Error occurred while invoking \"get\" API");
         }
     }
 
     private void getHeartBeatResourceRepresentation() {
-//        Util.toast("Getting HeartBeat Representation...");
+        Utils.log("Getting HeartBeat Representation...");
 
         Map<String, String> queryParams = new HashMap<>();
         try {
@@ -299,24 +311,25 @@ public class ConnectionManager implements
             foundHeartRateResource.get(queryParams, this);
         } catch (OcException e) {
             Log.e(TAG, e.toString());
-//            Util.toast("Error occurred while invoking \"get\" API");
+            Utils.log("Error occurred while invoking \"get\" API");
+            Utils.toast("Error occurred while invoking \"get\" API");
         }
     }
 
     @Override
     public void onGetCompleted(List<OcHeaderOption> list, final OcRepresentation ocRepresentation) {
         String resourceUri = ocRepresentation.getUri();
-        Log.w(TAG, "getUri(): " + ocRepresentation.getUri());
+        Utils.log("onGetCompleted(), Uri: " + ocRepresentation.getUri());
 
         try {
             switch (resourceUri) {
                 case URI_BLOOD_SPO2:
-                    bloodSpO2Data.setData(ocRepresentation.getValue(KEY_BLOOD_SPO2));
+                    bloodSpO2ObservableData.setData(ocRepresentation.getValue(KEY_BLOOD_SPO2));
 
                     foundBloodSpO2Resource.observe(
                             ObserveType.OBSERVE,
                             new HashMap<String, String>(),
-                            bloodSpO2Data);
+                            bloodSpO2ObservableData);
                     break;
 
                 case URI_HEART_RATE:
@@ -348,20 +361,22 @@ public class ConnectionManager implements
                     break;
 
                 case URI_BLOOD_GLUCOSE:
-                    bloodGlucoseData.setData(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE));
+                    bloodGlucoseObservableData.setData(ocRepresentation.getValue(KEY_BLOOD_GLUCOSE));
                     SystemClock.sleep(1);
 
                     foundBloodGlucoseResource.observe(
                             ObserveType.OBSERVE,
                             new HashMap<String, String>(),
-                            bloodGlucoseData);
+                            bloodGlucoseObservableData);
                     break;
 
                 default:
                     break;
             }
         } catch (OcException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.toString());
+            Utils.log("Error occurred while invoking \"get\" API");
+            Utils.toast("Error occurred while invoking \"get\" API");
         }
 
         observer.update(null, null);
@@ -369,7 +384,8 @@ public class ConnectionManager implements
 
     @Override
     public synchronized void onGetFailed(Throwable throwable) {
-//        Util.toast(throwable.getMessage());
         Log.e(TAG, throwable.getMessage(), throwable);
+        Utils.log(throwable.getMessage());
+        Utils.toast(throwable.getMessage());
     }
 }

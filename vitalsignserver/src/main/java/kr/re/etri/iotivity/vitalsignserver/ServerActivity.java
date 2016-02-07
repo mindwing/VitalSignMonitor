@@ -99,6 +99,19 @@ public class ServerActivity extends Activity {
     }
 
     private void stopServer() {
-        // TODO observation 정리하기
+        unregisterResource();
+    }
+
+    private void unregisterResource() {
+        try {
+            bloodPressureResource.unregisterResource();
+            bloodGlucoseResource.unregisterResource();
+            bloodSpO2Resource.unregisterResource();
+            bodyTemperatureResource.unregisterResource();
+            heartRateResource.unregisterResource();
+        } catch (OcException e) {
+            Log.e(TAG, e.toString());
+            Log.d(TAG, "Failed to unregister healthcare resources");
+        }
     }
 }

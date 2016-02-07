@@ -47,31 +47,36 @@ public abstract class ObservableData<T> implements
     @Override
     public synchronized void onObserveCompleted(List<OcHeaderOption> headerOptionList, OcRepresentation ocRepresentation, int sequenceNumber) {
         if (OcResource.OnObserveListener.REGISTER == sequenceNumber) {
-            Log.d(TAG, "Observe registration action is successful:");
+            Utils.log("onObserveCompleted(): Observe registration action is successful");
+            Log.d(TAG, "Observe registration action is successful");
         } else if (OcResource.OnObserveListener.DEREGISTER == sequenceNumber) {
+            Utils.log("onObserveCompleted(): Observe De-registration action is successful");
             Log.d(TAG, "Observe De-registration action is successful");
         } else if (OcResource.OnObserveListener.NO_OPTION == sequenceNumber) {
-            Log.d(TAG, "Observe registration or de-registration action is failed");
+            Utils.log("onObserveCompleted(): Observe registration or de-registration action is failed");
+            Log.e(TAG, "Observe registration or de-registration action is failed");
         }
 
-        Log.d(TAG, "OBSERVE Result:\tSequenceNumber: " + sequenceNumber);
+        Log.d(TAG, "onObserveCompleted(): OBSERVE Result:\tSequenceNumber: " + sequenceNumber);
 
         try {
             parseData(ocRepresentation);
 
-            Log.w(TAG, "parseData() - " + data);
+            Log.d(TAG, "parseData() - " + data);
             views[0].post(this);
         } catch (OcException e) {
+            Utils.log("onObserveCompleted(): Failed to get the attribute values");
             Log.e(TAG, e.toString());
-            Log.d(TAG, "Failed to get the attribute values");
+            Log.e(TAG, "Failed to get the attribute values");
         }
 
         //        mFoundLightResource.cancelObserve();
     }
 
     @Override
-    public synchronized void onObserveFailed(Throwable ex) {
-
+    public synchronized void onObserveFailed(Throwable e) {
+        Utils.log("onObserveFailed()");
+        Log.e(TAG, e.toString());
     }
 
     /**

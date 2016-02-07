@@ -9,7 +9,7 @@ import kr.re.etri.iotivity.smartwearable.HealthCareResource;
 
 /**
  * Created by mindwing on 2016-01-20.
- *
+ * <p>
  * Property name: bloodPressure
  * Value type: string
  */
@@ -24,6 +24,10 @@ public class BloodPressureResource extends HealthCareResource {
 
         resourceUri = URI_BLOOD_PRESSURE;
         resourceType = RESOURCE_TYPE_BLOOD_PRESSURE;
+    }
+
+    @Override
+    public void changeValue() {
     }
 
     @Override

@@ -24,7 +24,8 @@ public class BodyTemperatureResource extends HealthCareResource {
         resourceType = RESOURCE_TYPE_BODY_TEMPERATURE;
     }
 
-    void changeValue() {
+    @Override
+    public void changeValue() {
         bodyTemperature += getRandomNumber();
     }
 

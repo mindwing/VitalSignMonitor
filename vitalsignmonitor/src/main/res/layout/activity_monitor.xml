@@ -334,17 +334,14 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ScrollView
+    <TextView
+        android:id="@+id/log"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/vitalPane"
         android:layout_marginTop="30dp"
-        android:background="#afafaf">
-
-        <TextView
-            android:id="@+id/log"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+        android:background="#afafaf"
+        android:gravity="bottom"
+        android:scrollbars="vertical" />
 </RelativeLayout>

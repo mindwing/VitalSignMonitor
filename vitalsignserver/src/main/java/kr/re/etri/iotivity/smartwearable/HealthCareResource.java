@@ -20,23 +20,19 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.Random;
 
-import kr.re.etri.iotivity.smartwearable.HealthCareResourceSpec;
-
 /**
  * Created by mindwing on 2016-01-20.
  */
 public abstract class HealthCareResource implements OcPlatform.EntityHandler, HealthCareResourceSpec {
+    private final static int SUCCESS = 200;
     public static String TAG;
-
-    OcResourceHandle resourceHandle;    // resource handle
+    private static Random random = new Random();
     public String resourceUri;                 // resource URI
     public String resourceType;                // resource type
-    String resourceInterface = OcPlatform.DEFAULT_INTERFACE;          // resource interface.
     public String name;                        // resource name
-
-    private static Random random = new Random();
-
-    private final static int SUCCESS = 200;
+    OcResourceHandle resourceHandle;    // resource handle
+    String resourceInterface = OcPlatform.DEFAULT_INTERFACE;          // resource interface.
+    private Thread notifyThread;
 
     public HealthCareResource() {
         TAG = getClass().getSimpleName();
@@ -83,7 +79,6 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
 
         return ehResult;
     }
-
 
     private EntityHandlerResult handleRequest(OcResourceRequest request) {
         EntityHandlerResult ehResult = EntityHandlerResult.ERROR;
@@ -135,8 +130,6 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
         return ehResult;
     }
 
-    private Thread notifyThread;
-
     private synchronized EntityHandlerResult handleObserver(final OcResourceRequest request) {
         ObservationInfo observationInfo = request.getObservationInfo();
         switch (observationInfo.getObserveAction()) {
@@ -163,7 +156,7 @@ public abstract class HealthCareResource implements OcPlatform.EntityHandler, He
         return EntityHandlerResult.OK;
     }
 
-    void changeValue() {}
+    abstract public void changeValue();
 
     private void notifyObservers(OcResourceRequest request) {
         while (true) {

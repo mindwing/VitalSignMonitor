@@ -3,6 +3,7 @@ package kr.re.etri.iotivity.vitalsignmonitor;
 import android.app.Application;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -39,25 +40,6 @@ public class MonitorActivity extends AppCompatActivity {
     private TextView[] bloodPressureView = new TextView[4];
     private TextView[] bodyTemperatureView = new TextView[4];
     private TextView[] bloodGlucoseView = new TextView[4];
-
-    /**
-     * 필드들의 갱신시각을 화면에 표시
-     */
-    private class UpdateDateRunner implements Runnable, Observer {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-
-        @Override
-        public void run() {
-            String date = dateFormat.format(new Date());
-            updateDate.setText(date);
-        }
-
-        @Override
-        public void update(Observable observable, Object data) {
-            updateDate.post(this);
-        }
-    }
-
     private UpdateDateRunner updateDateRunner = new UpdateDateRunner();
 
     @Override
@@ -102,6 +84,11 @@ public class MonitorActivity extends AppCompatActivity {
         bloodGlucoseView[1] = (TextView) findViewById(R.id.blood_glucose_1);
         bloodGlucoseView[2] = (TextView) findViewById(R.id.blood_glucose_2);
         bloodGlucoseView[3] = (TextView) findViewById(R.id.blood_glucose_3);
+
+        TextView logView = (TextView) findViewById(R.id.log);
+        logView.setMovementMethod(new ScrollingMovementMethod());
+
+        Util.setup(logView);
     }
 
     private void prepareConfiguration() {
@@ -119,6 +106,7 @@ public class MonitorActivity extends AppCompatActivity {
 
     /**
      * server 에 연결하고자 버튼을 터치하면 호출되는 메서드
+     *
      * @param view 터치한 View
      */
     public void toggleConnection(View view) {
@@ -129,6 +117,24 @@ public class MonitorActivity extends AppCompatActivity {
             connManager.connectToServer(resourceName);
         } else {
             connManager.disconnectFromServer(resourceName);
+        }
+    }
+
+    /**
+     * 필드들의 갱신시각을 화면에 표시
+     */
+    private class UpdateDateRunner implements Runnable, Observer {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        @Override
+        public void run() {
+            String date = dateFormat.format(new Date());
+            updateDate.setText(date);
+        }
+
+        @Override
+        public void update(Observable observable, Object data) {
+            updateDate.post(this);
         }
     }
 }
